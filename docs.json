@@ -1,0 +1,65 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "aspen",
+  "name": "WorqHat Docs",
+  "colors": {
+    "primary": "#12A7D3",
+    "light": "#81D7F7",
+    "dark": "#1b0a66"
+  },
+  "favicon": "/W.svg",
+  "logo": {
+    "light": "/logo/logo-light.png",
+    "dark": "/logo/logo-dark.png"
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "Support",
+        "href": "https://worqhat.com/demo"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Dashboard",
+      "href": "https://worqhat.app"
+    }
+  },
+  "footer": {
+    "socials": {
+      "x": "https://x.com/worqhat",
+      "github": "https://github.com/worqhat",
+      "linkedin": "https://linkedin.com/company/worqhat",
+      "instagram": "https://instagram.com/worqhat",
+      "youtube": "https://www.youtube.com/@worqhat"
+    }
+  },
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Introduction",
+            "pages": ["get-started", "quickstart", "rate-limit"]
+          }
+        ]
+      }
+    ],
+    "global": {
+      "anchors": [
+        {
+          "anchor": "API Reference",
+          "icon": "terminal",
+          "href": "https://docs.worqhat.com"
+        },
+
+        {
+          "anchor": "Contact us",
+          "icon": "envelope",
+          "href": "https://worqhat.com/contact-us"
+        }
+      ]
+    }
+  }
+}
