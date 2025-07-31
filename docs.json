@@ -2,6 +2,7 @@
   "$schema": "https://mintlify.com/docs.json",
   "theme": "aspen",
   "name": "WorqHat Docs",
+  "description": "WorqHat API Documentation - The official API server for WorqHat platform. This API provides endpoints to manage workflows, retrieve metrics, and interact with the WorqHat ecosystem.",
   "colors": {
     "primary": "#12A7D3",
     "light": "#81D7F7",
@@ -24,6 +25,21 @@
       "label": "Dashboard",
       "href": "https://worqhat.app"
     }
+  },
+  "integrations": {
+    "intercom": {
+      "appId": "or2gpwjd"
+    }
+  },
+  "styling": {
+    "codeblocks": "system",
+    "eyebrows": "breadcrumbs"
+  },
+  "background": {
+    "decoration": "windows"
+  },
+  "api": {
+    "openapi": "openapi.yaml"
   },
   "footer": {
     "socials": {
