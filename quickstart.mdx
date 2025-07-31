@@ -23,10 +23,33 @@ Never share your API key publicly or commit it to version control systems. Use e
 
 Let's make a simple request to check the API health status:
 
-```bash
+<CodeGroup>
+```bash curl
 curl -X GET "https://api.worqhat.com/health" \
   -H "Authorization: Bearer YOUR_API_KEY"
 ```
+
+```javascript fetch.js
+fetch('https://api.worqhat.com/health', {
+  headers: {
+    'Authorization': 'Bearer YOUR_API_KEY'
+  }
+})
+.then(response => response.json())
+.then(data => console.log(data));
+```
+
+```python requests.py
+import requests
+
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY"
+}
+
+response = requests.get("https://api.worqhat.com/health", headers=headers)
+print(response.json())
+```
+</CodeGroup>
 
 You should receive a response similar to:
 
@@ -64,9 +87,10 @@ Now that you've made your first request, you can explore the different endpoints
 
 ## Code Examples
 
-### JavaScript (Node.js)
+### Checking API Health
 
-```javascript
+<CodeGroup dropdown>
+```javascript node.js
 import Worqhat from 'worqhat';
 
 const client = new Worqhat({
@@ -86,9 +110,7 @@ async function checkApiHealth() {
 checkApiHealth();
 ```
 
-### Python
-
-```python
+```python python
 from worqhat import Worqhat
 
 # Initialize the client
@@ -101,9 +123,7 @@ response = client.health.check()
 print(f"API Status: {response.status}")
 ```
 
-### Go
-
-```go
+```go golang
 package main
 
 import (
@@ -127,6 +147,92 @@ func main() {
   fmt.Printf("API Status: %s\n", response.Status)
 }
 ```
+
+```java java
+import com.worqhat.api.client.WorqhatClient;
+import com.worqhat.api.client.okhttp.WorqhatOkHttpClient;
+import com.worqhat.api.models.health.HealthCheckResponse;
+
+public class HealthCheck {
+    public static void main(String[] args) {
+        WorqhatClient client = WorqhatOkHttpClient.builder()
+            .apiKey(System.getenv("WORQHAT_API_KEY"))
+            .build();
+            
+        HealthCheckResponse response = client.health().check();
+        System.out.println("API Status: " + response.getStatus());
+    }
+}
+```
+</CodeGroup>
+
+### Database Operations
+
+<CodeGroup dropdown>
+```javascript node.js
+import Worqhat from 'worqhat';
+
+const client = new Worqhat({
+  apiKey: process.env.WORQHAT_API_KEY,
+});
+
+async function queryDatabase() {
+  try {
+    const response = await client.db.executeQuery({
+      query: "SELECT * FROM users WHERE status = 'active' LIMIT 10",
+    });
+    console.log(response.data);
+    return response;
+  } catch (error) {
+    console.error('Error querying database:', error);
+  }
+}
+
+queryDatabase();
+```
+
+```python python
+from worqhat import Worqhat
+
+# Initialize the client
+client = Worqhat(
+    api_key="YOUR_API_KEY",  # Better to use environment variables
+)
+
+# Query the database
+response = client.db.execute_query(
+    query="SELECT * FROM users WHERE status = 'active' LIMIT 10",
+)
+print(response.data)
+```
+
+```go golang
+package main
+
+import (
+  "context"
+  "fmt"
+
+  "github.com/WorqHat/worqhat-go-sdk"
+  "github.com/WorqHat/worqhat-go-sdk/option"
+)
+
+func main() {
+  client := worqhat.NewClient(
+    option.WithAPIKey("YOUR_API_KEY"),  // Better to use environment variables
+  )
+  
+  response, err := client.DB.ExecuteQuery(context.TODO(), worqhat.DBExecuteQueryParams{
+    Query: "SELECT * FROM users WHERE status = 'active' LIMIT 10",
+  })
+  if err != nil {
+    panic(err.Error())
+  }
+  
+  fmt.Printf("%+v\n", response.Data)
+}
+```
+</CodeGroup>
 
 ## Next Steps
 
