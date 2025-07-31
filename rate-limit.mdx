@@ -1,0 +1,115 @@
+---
+title: "🔄 API Usage Guidelines"
+---
+
+## API Usage Guidelines
+
+While the WorqHat API currently does not enforce strict rate limits, we recommend following these best practices to ensure optimal performance and reliability for all users.
+
+### Best Practices
+
+#### 1. Implement Retry Logic
+
+When making API requests, implement proper retry logic with exponential backoff to handle temporary service disruptions:
+
+```javascript
+async function makeApiRequestWithRetry(apiCall, maxRetries = 3) {
+  let retries = 0;
+  
+  while (retries < maxRetries) {
+    try {
+      return await apiCall();
+    } catch (error) {
+      if (error.status === 429 || error.status >= 500) {
+        // Calculate delay with exponential backoff
+        const delay = Math.pow(2, retries) * 1000 + Math.random() * 1000;
+        console.log(`Retrying after ${delay}ms...`);
+        await new Promise(resolve => setTimeout(resolve, delay));
+        retries++;
+      } else {
+        // For other errors, don't retry
+        throw error;
+      }
+    }
+  }
+  
+  throw new Error('Maximum retries reached');
+}
+```
+
+#### 2. Batch Operations When Possible
+
+Instead of making multiple individual API calls, use batch operations when available:
+
+```javascript
+// Instead of this:
+for (const item of items) {
+  await client.db.insertRecord({
+    table: 'users',
+    data: item
+  });
+}
+
+// Do this:
+await client.db.executeQuery({
+  query: "INSERT INTO users (name, email) VALUES ('John', 'john@example.com'), ('Jane', 'jane@example.com')"
+});
+```
+
+#### 3. Cache Responses
+
+Implement client-side caching for frequently accessed data that doesn't change often:
+
+```javascript
+const cache = new Map();
+const CACHE_TTL = 60 * 1000; // 1 minute
+
+async function getCachedData(key, fetchFunction) {
+  const now = Date.now();
+  const cachedItem = cache.get(key);
+  
+  if (cachedItem && now - cachedItem.timestamp < CACHE_TTL) {
+    return cachedItem.data;
+  }
+  
+  const data = await fetchFunction();
+  cache.set(key, { data, timestamp: now });
+  return data;
+}
+```
+
+#### 4. Use Webhooks for Real-time Updates
+
+For real-time updates, consider using webhooks instead of polling the API:
+
+```javascript
+// Configure a webhook endpoint in your application
+app.post('/webhooks/worqhat', (req, res) => {
+  const event = req.body;
+  
+  // Process the event
+  switch (event.type) {
+    case 'workflow.completed':
+      handleWorkflowCompleted(event.data);
+      break;
+    case 'user.created':
+      handleUserCreated(event.data);
+      break;
+    // Handle other event types
+  }
+  
+  res.status(200).send('Event received');
+});
+```
+
+### Monitoring Your API Usage
+
+While we don't currently enforce strict rate limits, we do monitor API usage patterns to ensure the stability and performance of our platform. If we detect unusual or potentially harmful usage patterns, we may reach out to you to discuss your use case and find a solution that works for everyone.
+
+### Future Considerations
+
+As our platform grows, we may introduce rate limits to ensure fair usage across all customers. We will provide advance notice of any changes to our API usage policies.
+
+<Card title="Need Help?" icon="question" href="https://worqhat.com/support">
+  If you have questions about API usage or need higher throughput for your application, please contact our support team.
+</Card>
