@@ -3,8 +3,6 @@ title: 'Insert Data'
 description: 'Insert a new record into a database table'
 ---
 
-# Insert Data
-
 Inserts a new record into the specified WorqDB table. This endpoint allows you to add new data to your database tables with optional control over the document identifier.
 
 ```endpoint
@@ -338,7 +336,6 @@ This example shows how to insert a record with a custom documentId that you spec
 <ResponseField name="data" type="object">
   The complete inserted record, including:
   - Any auto-generated fields like `documentId` (if you didn't specify one)
-  - System fields like `createdAt` and `organization_id`
   - All the data you provided in the request
 </ResponseField>
 
@@ -356,9 +353,7 @@ This example shows how to insert a record with a custom documentId that you spec
     "name": "John Doe",
     "email": "john@example.com",
     "role": "user",
-    "active": true,
-    "createdAt": "2025-08-01T18:02:15Z",
-    "organization_id": "org_67890fghij"
+    "active": true
   },
   "message": "Record inserted successfully"
 }
@@ -379,4 +374,4 @@ This example shows how to insert a record with a custom documentId that you spec
 - For records that need a predictable ID, provide your own `documentId`
 - For records where the ID doesn't matter, let the system generate one
 - The `documentId` is used as the primary key for all operations (update, delete, query)
-- Fields like `createdAt` and `organization_id` are automatically added to your records
+- The system will handle all internal record management automatically
