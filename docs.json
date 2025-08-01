@@ -60,6 +60,34 @@
             "pages": ["get-started", "quickstart", "rate-limit"]
           }
         ]
+      },
+      {
+        "tab": "API Reference",
+        "groups": [
+                      {
+            "group": "System",
+            "pages": [
+              "api-reference/system/health",
+              "api-reference/system/info"
+            ]
+          },
+          {
+            "group": "Database",
+            "pages": [
+              "api-reference/database/query",
+              "api-reference/database/insert",
+              "api-reference/database/update",
+              "api-reference/database/delete",
+              "api-reference/database/natural-language-query"
+            ]
+          },
+          {
+            "group": "Workflows",
+            "pages": [
+              "api-reference/workflows/metrics"
+            ]
+          }
+        ]
       }
     ],
     "global": {

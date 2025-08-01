@@ -1,0 +1,109 @@
+---
+title: 'Health Check'
+description: 'Check the health status of the API'
+---
+
+# Health Check
+
+Returns the current health status of the API. This endpoint can be used to verify that the API is operational and accessible.
+
+```endpoint
+GET /health
+```
+
+## Response
+
+<ResponseField name="status" type="string">
+  The current health status of the API (e.g., "ok", "degraded", "down")
+</ResponseField>
+
+<ResponseField name="version" type="string">
+  The current version of the API
+</ResponseField>
+
+<ResponseField name="timestamp" type="string">
+  The timestamp of when the health check was performed
+</ResponseField>
+
+<ResponseField name="uptime" type="integer">
+  The API uptime in seconds
+</ResponseField>
+
+<RequestExample>
+```bash cURL
+curl -X GET "https://api.worqhat.com/health" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+```javascript Node.js
+import Worqhat from 'worqhat';
+
+const client = new Worqhat({
+  apiKey: process.env.WORQHAT_API_KEY,
+});
+
+async function checkHealth() {
+  try {
+    const response = await client.system.health();
+    console.log(`API Status: ${response.status}`);
+    console.log(`API Version: ${response.version}`);
+    return response;
+  } catch (error) {
+    console.error('Error checking API health:', error);
+  }
+}
+
+checkHealth();
+```
+
+```python Python
+from worqhat import Worqhat
+
+# Initialize the client
+client = Worqhat(
+    api_key="YOUR_API_KEY",  # Better to use environment variables
+)
+
+# Check API health
+response = client.system.health()
+print(f"API Status: {response.status}")
+print(f"API Version: {response.version}")
+```
+
+```go Go
+package main
+
+import (
+  "context"
+  "fmt"
+
+  "github.com/WorqHat/worqhat-go-sdk"
+  "github.com/WorqHat/worqhat-go-sdk/option"
+)
+
+func main() {
+  client := worqhat.NewClient(
+    option.WithAPIKey("YOUR_API_KEY"),  // Better to use environment variables
+  )
+  
+  response, err := client.System.Health(context.TODO())
+  if err != nil {
+    panic(err.Error())
+  }
+  
+  fmt.Printf("API Status: %s\n", response.Status)
+  fmt.Printf("API Version: %s\n", response.Version)
+}
+```
+</RequestExample>
+
+<ResponseExample>
+```json
+{
+  "status": "ok",
+  "version": "1.0.0",
+  "timestamp": "2025-08-01T14:30:45Z",
+  "uptime": 1209600
+}
+```
+</ResponseExample>

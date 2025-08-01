@@ -1,0 +1,155 @@
+---
+title: 'Update Data'
+description: 'Update records in a database table'
+---
+
+# Update Data
+
+Updates records in the specified table that match the given conditions. Organization ID is automatically included in the conditions for multi-tenant security.
+
+```endpoint
+POST /db/update
+```
+
+## Request Body
+
+<ParamField body="table" type="string" required>
+  Table name to update records in
+</ParamField>
+
+<ParamField body="conditions" type="object" required>
+  Conditions to match records for updating
+</ParamField>
+
+<ParamField body="data" type="object" required>
+  Data to update as key-value pairs
+</ParamField>
+
+## Response
+
+<ResponseField name="success" type="boolean">
+  Indicates if the update operation was successful
+</ResponseField>
+
+<ResponseField name="updatedCount" type="integer">
+  Number of records updated
+</ResponseField>
+
+<ResponseField name="message" type="string">
+  Success message
+</ResponseField>
+
+<RequestExample>
+```bash cURL
+curl -X POST "https://api.worqhat.com/db/update" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -d '{
+    "table": "users",
+    "conditions": {
+      "id": "user_123"
+    },
+    "data": {
+      "status": "inactive",
+      "last_updated": "2025-08-01T12:00:00Z"
+    }
+  }'
+```
+
+```javascript Node.js
+import Worqhat from 'worqhat';
+
+const client = new Worqhat({
+  apiKey: process.env.WORQHAT_API_KEY,
+});
+
+async function updateRecords() {
+  try {
+    const response = await client.db.updateRecords({
+      table: 'users',
+      conditions: {
+        id: 'user_123'
+      },
+      data: {
+        status: 'inactive',
+        last_updated: new Date().toISOString()
+      }
+    });
+    console.log(`Updated ${response.updatedCount} records`);
+    return response;
+  } catch (error) {
+    console.error('Error updating records:', error);
+  }
+}
+
+updateRecords();
+```
+
+```python Python
+from worqhat import Worqhat
+from datetime import datetime
+
+# Initialize the client
+client = Worqhat(
+    api_key="YOUR_API_KEY",  # Better to use environment variables
+)
+
+# Update records
+response = client.db.update_records(
+    table="users",
+    conditions={
+        "id": "user_123"
+    },
+    data={
+        "status": "inactive",
+        "last_updated": datetime.now().isoformat()
+    }
+)
+print(f"Updated {response.updated_count} records")
+```
+
+```go Go
+package main
+
+import (
+  "context"
+  "fmt"
+  "time"
+
+  "github.com/WorqHat/worqhat-go-sdk"
+  "github.com/WorqHat/worqhat-go-sdk/option"
+)
+
+func main() {
+  client := worqhat.NewClient(
+    option.WithAPIKey("YOUR_API_KEY"),  // Better to use environment variables
+  )
+  
+  response, err := client.DB.UpdateRecords(context.TODO(), worqhat.DBUpdateRecordsParams{
+    Table: "users",
+    Conditions: map[string]interface{}{
+      "id": "user_123",
+    },
+    Data: map[string]interface{}{
+      "status": "inactive",
+      "last_updated": time.Now().Format(time.RFC3339),
+    },
+  })
+  if err != nil {
+    panic(err.Error())
+  }
+  
+  fmt.Printf("Updated %d records\n", response.UpdatedCount)
+}
+```
+</RequestExample>
+
+<ResponseExample>
+```json
+{
+  "success": true,
+  "updatedCount": 1,
+  "message": "Records updated successfully"
+}
+```
+</ResponseExample>

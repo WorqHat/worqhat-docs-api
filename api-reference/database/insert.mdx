@@ -1,0 +1,143 @@
+---
+title: 'Insert Data'
+description: 'Insert a new record into a database table'
+---
+
+# Insert Data
+
+Inserts a new record into the specified table. Organization ID is automatically added for multi-tenant security.
+
+```endpoint
+POST /db/insert
+```
+
+## Request Body
+
+<ParamField body="table" type="string" required>
+  Table name to insert into
+</ParamField>
+
+<ParamField body="data" type="object" required>
+  Data to insert as key-value pairs
+</ParamField>
+
+## Response
+
+<ResponseField name="success" type="boolean">
+  Indicates if the data was inserted successfully
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  The inserted data including any auto-generated fields
+</ResponseField>
+
+<ResponseField name="message" type="string">
+  Success message
+</ResponseField>
+
+<RequestExample>
+```bash cURL
+curl -X POST "https://api.worqhat.com/db/insert" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -d '{
+    "table": "users",
+    "data": {
+      "name": "John Doe",
+      "email": "john@worqhat.com"
+    }
+  }'
+```
+
+```javascript Node.js
+import Worqhat from 'worqhat';
+
+const client = new Worqhat({
+  apiKey: process.env.WORQHAT_API_KEY,
+});
+
+async function insertRecord() {
+  try {
+    const response = await client.db.insertRecord({
+      table: 'users',
+      data: {
+        name: 'John Doe',
+        email: 'john@worqhat.com'
+      }
+    });
+    console.log(response.data);
+    return response;
+  } catch (error) {
+    console.error('Error inserting record:', error);
+  }
+}
+
+insertRecord();
+```
+
+```python Python
+from worqhat import Worqhat
+
+# Initialize the client
+client = Worqhat(
+    api_key="YOUR_API_KEY",  # Better to use environment variables
+)
+
+# Insert record
+response = client.db.insert_record(
+    table="users",
+    data={
+        "name": "John Doe",
+        "email": "john@worqhat.com"
+    }
+)
+print(response.data)
+```
+
+```go Go
+package main
+
+import (
+  "context"
+  "fmt"
+
+  "github.com/WorqHat/worqhat-go-sdk"
+  "github.com/WorqHat/worqhat-go-sdk/option"
+)
+
+func main() {
+  client := worqhat.NewClient(
+    option.WithAPIKey("YOUR_API_KEY"),  // Better to use environment variables
+  )
+  
+  response, err := client.DB.InsertRecord(context.TODO(), worqhat.DBInsertRecordParams{
+    Table: "users",
+    Data: map[string]interface{}{
+      "name": "John Doe",
+      "email": "john@worqhat.com",
+    },
+  })
+  if err != nil {
+    panic(err.Error())
+  }
+  
+  fmt.Printf("%+v\n", response.Data)
+}
+```
+</RequestExample>
+
+<ResponseExample>
+```json
+{
+  "success": true,
+  "data": {
+    "id": "rec_12345",
+    "name": "John Doe",
+    "email": "john@worqhat.com",
+    "created_at": "2025-07-24T17:00:00Z",
+    "org_id": "org_67890"
+  },
+  "message": "Record inserted successfully"
+}
+```
+</ResponseExample>
