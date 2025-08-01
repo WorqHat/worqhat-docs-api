@@ -1044,11 +1044,9 @@ paths:
   /db/nl-query:
     post:
       summary: Process natural language query
-      description: >
+      description: |
         Converts a natural language question into a SQL query and executes it.
-
-        Organization ID filtering is automatically applied for multi-tenant
-        security.
+        Organization ID filtering is automatically applied for multi-tenant security.
       tags:
         - Database
       security:
@@ -1065,12 +1063,11 @@ paths:
                 question:
                   type: string
                   description: Natural language question
-                  example: How many active users do we have?
-                context:
-                  type: object
-                  description: Additional context for the query
-                  example:
-                    timeframe: last 30 days
+                  example: "How many active users do we have?"
+                table:
+                  type: string
+                  description: Table name to query
+                  example: "users"
       responses:
         '200':
           description: Query processed successfully
@@ -1089,12 +1086,10 @@ paths:
                   sql:
                     type: string
                     description: The generated SQL query
-                    example: >-
-                      SELECT COUNT(*) as count FROM users WHERE status =
-                      'active'
+                    example: "SELECT COUNT(*) as count FROM users WHERE status = 'active'"
                   message:
                     type: string
-                    example: Query processed successfully
+                    example: "Query processed successfully"
         '400':
           description: Bad request
           content:
@@ -1127,12 +1122,11 @@ paths:
               -H "Authorization: Bearer YOUR_API_KEY" \
               -d '{
                 "question": "How many active users do we have?",
-                "context": {"timeframe": "last 30 days"}
+                "table": "users"
               }'
         - lang: javascript
-          source: >
-            const response = await fetch('https://api.worqhat.com/db/nl-query',
-            {
+          source: |
+            const response = await fetch('https://api.worqhat.com/db/nl-query', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -1140,85 +1134,11 @@ paths:
               },
               body: JSON.stringify({
                 question: "How many active users do we have?",
-                context: {timeframe: "last 30 days"}
+                table: "users"
               })
             });
-
             const data = await response.json();
-
             console.log(data);
-      x-codeSamples:
-        - lang: JavaScript
-          source: >-
-            import Worqhat from 'worqhat';
-
-
-            const client = new Worqhat({
-              apiKey: 'My API Key',
-            });
-
-
-            const response = await client.db.processNlQuery({ question: 'How
-            many active users do we have?' });
-
-
-            console.log(response.data);
-        - lang: Python
-          source: |-
-            from worqhat import Worqhat
-
-            client = Worqhat(
-                api_key="My API Key",
-            )
-            response = client.db.process_nl_query(
-                question="How many active users do we have?",
-            )
-            print(response.data)
-        - lang: Go
-          source: |
-            package main
-
-            import (
-              "context"
-              "fmt"
-
-              "github.com/WorqHat/worqhat-go-sdk"
-              "github.com/WorqHat/worqhat-go-sdk/option"
-            )
-
-            func main() {
-              client := worqhat.NewClient(
-                option.WithAPIKey("My API Key"),
-              )
-              response, err := client.DB.ProcessNlQuery(context.TODO(), worqhat.DBProcessNlQueryParams{
-                Question: "How many active users do we have?",
-              })
-              if err != nil {
-                panic(err.Error())
-              }
-              fmt.Printf("%+v\n", response.Data)
-            }
-        - lang: Java
-          source: |-
-            package com.worqhat.api.example;
-
-            import com.worqhat.api.client.WorqhatClient;
-            import com.worqhat.api.client.okhttp.WorqhatOkHttpClient;
-            import com.worqhat.api.models.db.DbProcessNlQueryParams;
-            import com.worqhat.api.models.db.DbProcessNlQueryResponse;
-
-            public final class Main {
-                private Main() {}
-
-                public static void main(String[] args) {
-                    WorqhatClient client = WorqhatOkHttpClient.fromEnv();
-
-                    DbProcessNlQueryParams params = DbProcessNlQueryParams.builder()
-                        .question("How many active users do we have?")
-                        .build();
-                    DbProcessNlQueryResponse response = client.db().processNlQuery(params);
-                }
-            }
   /:
     get:
       tags:

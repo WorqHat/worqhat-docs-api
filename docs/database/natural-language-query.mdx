@@ -3,22 +3,38 @@ title: 'Natural Language Query'
 description: 'Query the database using natural language'
 ---
 
-# Natural Language Query
-
-Execute database queries using natural language. This endpoint translates natural language questions into SQL and executes them against WorqDB.
+Executes database queries using natural language. This endpoint translates natural language questions into SQL and executes them against WorqDB.
 
 ```endpoint
-POST /db/nlquery
+POST https://api.worqhat.com/db/nl-query
 ```
+
+## What Does This Endpoint Do?
+
+This endpoint allows you to query your database using plain English questions instead of writing SQL. Think of it like having a conversation with your database - you ask questions in natural language, and the API translates them into SQL queries and returns the results.
+
+## When to Use Natural Language Queries
+
+- **For non-technical users** who need to query data but don't know SQL
+- **For quick data exploration** without writing complex SQL queries
+- **For building conversational interfaces** that need to translate user questions into database queries
+- **For prototyping** when you want to quickly test ideas without writing formal queries
+
+## How It Works
+
+1. You provide a natural language question and specify which table to query
+2. The API translates your question into a SQL query
+3. The SQL query is executed against your database
+4. The results are returned along with the generated SQL for transparency
 
 ## Request Body
 
 <ParamField body="question" type="string" required>
-  Natural language question to query the database
+  Natural language question to query the database (e.g., "How many active users do we have?")
 </ParamField>
 
-<ParamField body="context" type="object">
-  Optional context to help improve query accuracy
+<ParamField body="table" type="string" required>
+  The name of the table to query (e.g., "users")
 </ParamField>
 
 ## Response
@@ -31,7 +47,7 @@ POST /db/nlquery
   The query results as an array of objects
 </ResponseField>
 
-<ResponseField name="generatedQuery" type="string">
+<ResponseField name="sql" type="string">
   The SQL query generated from the natural language question
 </ResponseField>
 
@@ -39,97 +55,284 @@ POST /db/nlquery
   Query execution time in milliseconds
 </ResponseField>
 
-<RequestExample>
-```bash cURL
-curl -X POST "https://api.worqhat.com/db/nlquery" \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer YOUR_API_KEY" \
-  -d '{
-    "question": "How many active users registered last month?",
-    "context": {
-      "tables": ["users"]
-    }
-  }'
-```
+<ResponseField name="message" type="string">
+  A message indicating the status of the query execution
+</ResponseField>
 
-```javascript Node.js
-import Worqhat from 'worqhat';
+## Code Examples
 
-const client = new Worqhat({
-  apiKey: process.env.WORQHAT_API_KEY,
-});
+### Example: Basic Natural Language Query
 
-async function naturalLanguageQuery() {
-  try {
-    const response = await client.db.naturalLanguageQuery({
-      question: "How many active users registered last month?",
-      context: {
-        tables: ["users"]
-      }
+This example shows how to execute a simple natural language query to retrieve active user count.
+
+<Tabs>
+  <Tab title="Node.js" icon="js">
+    ```javascript
+    import Worqhat from 'worqhat';
+    
+    // Initialize the client with your API key
+    const client = new Worqhat({
+      apiKey: process.env.WORQHAT_API_KEY, // Always use environment variables for API keys
     });
-    console.log(response.data);
-    console.log(`Generated SQL: ${response.generatedQuery}`);
-    return response;
-  } catch (error) {
-    console.error('Error executing natural language query:', error);
-  }
-}
-
-naturalLanguageQuery();
-```
-
-```python Python
-from worqhat import Worqhat
-
-# Initialize the client
-client = Worqhat(
-    api_key="YOUR_API_KEY",  # Better to use environment variables
-)
-
-# Execute natural language query
-response = client.db.natural_language_query(
-    question="How many active users registered last month?",
-    context={
-        "tables": ["users"]
+    
+    async function countActiveUsers() {
+      try {
+        // Call the processNlQuery method
+        const response = await client.db.processNlQuery({
+          question: "How many active users do we have?",
+          table: "users"
+        });
+        
+        // Handle the successful response
+        console.log(`Result: ${JSON.stringify(response.data)}`);
+        console.log('Generated SQL:', response.sql);
+        console.log('Query execution time:', response.executionTime, 'ms');
+        return response;
+      } catch (error) {
+        // Handle any errors
+        console.error('Error executing query:', error.message);
+      }
     }
-)
-print(response.data)
-print(f"Generated SQL: {response.generated_query}")
-```
-
-```go Go
-package main
-
-import (
-  "context"
-  "fmt"
-
-  "github.com/WorqHat/worqhat-go-sdk"
-  "github.com/WorqHat/worqhat-go-sdk/option"
-)
-
-func main() {
-  client := worqhat.NewClient(
-    option.WithAPIKey("YOUR_API_KEY"),  // Better to use environment variables
-  )
+    
+    // Call the function
+    countActiveUsers();
+    ```
+  </Tab>
   
-  response, err := client.DB.NaturalLanguageQuery(context.TODO(), worqhat.DBNaturalLanguageQueryParams{
-    Question: "How many active users registered last month?",
-    Context: map[string]interface{}{
-      "tables": []string{"users"},
-    },
-  })
-  if err != nil {
-    panic(err.Error())
-  }
+  <Tab title="Python" icon="python">
+    ```python
+    from worqhat import Worqhat
+    import os
+    
+    # Initialize the client with your API key
+    client = Worqhat(
+        api_key=os.environ.get("WORQHAT_API_KEY"),  # Using environment variables for security
+    )
+    
+    # Execute natural language query
+    try:
+        response = client.db.process_nl_query(
+            question="How many active users do we have?",
+            table="users"
+        )
+        
+        # Handle the successful response
+        print(f"Result: {response.data}")
+        print(f"Generated SQL: {response.sql}")
+        print(f"Query execution time: {response.execution_time} ms")
+    except Exception as e:
+        # Handle any errors
+        print(f"Error executing query: {str(e)}")
+    ```
+  </Tab>
   
-  fmt.Printf("%+v\n", response.Data)
-  fmt.Printf("Generated SQL: %s\n", response.GeneratedQuery)
-}
-```
-</RequestExample>
+  <Tab title="Go" icon="golang">
+    ```go
+    package main
+    
+    import (
+      "context"
+      "fmt"
+      "os"
+    
+      "github.com/WorqHat/worqhat-go-sdk"
+      "github.com/WorqHat/worqhat-go-sdk/option"
+    )
+    
+    func main() {
+      // Initialize the client with your API key
+      client := worqhat.NewClient(
+        option.WithAPIKey(os.Getenv("WORQHAT_API_KEY")),  // Using environment variables
+      )
+      
+      // Execute natural language query
+      response, err := client.DB.ProcessNlQuery(context.TODO(), worqhat.DBProcessNlQueryParams{
+        Question: "How many active users do we have?",
+        Table: "users",
+      })
+      
+      // Handle errors
+      if err != nil {
+        fmt.Printf("Error executing query: %s\n", err.Error())
+        return
+      }
+      
+      // Handle the successful response
+      fmt.Printf("Result: %+v\n", response.Data)
+      fmt.Printf("Generated SQL: %s\n", response.SQL)
+      fmt.Printf("Query execution time: %d ms\n", response.ExecutionTime)
+    }
+    ```
+  </Tab>
+  
+  <Tab title="cURL" icon="terminal">
+    ```bash
+    # Execute natural language query
+    curl -X POST "https://api.worqhat.com/db/nl-query" \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer YOUR_API_KEY" \
+      -d '{
+        "question": "How many active users do we have?",
+        "table": "users"
+      }'
+    ```
 
-<ResponseExample>
+
+  </Tab>
+</Tabs>
+
+### Example: Advanced Natural Language Query
+
+This example shows how to execute a more complex natural language query to analyze sales data.
+
+<Tabs>
+  <Tab title="Node.js" icon="js">
+    ```javascript
+    import Worqhat from 'worqhat';
+    
+    // Initialize the client with your API key
+    const client = new Worqhat({
+      apiKey: process.env.WORQHAT_API_KEY,
+    });
+    
+    async function analyzeSalesData() {
+      try {
+        // More complex natural language query
+        const response = await client.db.processNlQuery({
+          question: "What were the top 3 product categories by revenue last quarter?",
+          table: "sales"
+        });
+        
+        // Handle the successful response
+        console.log('Analysis results:', response.data);
+        console.log('Generated SQL:', response.sql);
+        return response;
+      } catch (error) {
+        console.error('Error analyzing sales data:', error.message);
+      }
+    }
+    
+    analyzeSalesData();
+    ```
+  </Tab>
+  
+  <Tab title="Python" icon="python">
+    ```python
+    from worqhat import Worqhat
+    import os
+    
+    # Initialize the client with your API key
+    client = Worqhat(
+        api_key=os.environ.get("WORQHAT_API_KEY"),
+    )
+    
+    # Execute more complex natural language query
+    try:
+        response = client.db.process_nl_query(
+            question="What were the top 3 product categories by revenue last quarter?",
+            table="sales"
+        )
+        
+        # Handle the successful response
+        print("Analysis results:")
+        print(response.data)
+        print(f"Generated SQL: {response.sql}")
+    except Exception as e:
+        print(f"Error analyzing sales data: {str(e)}")
+    ```
+  </Tab>
+  
+  <Tab title="Go" icon="golang">
+    ```go
+    package main
+    
+    import (
+      "context"
+      "fmt"
+      "os"
+    
+      "github.com/WorqHat/worqhat-go-sdk"
+      "github.com/WorqHat/worqhat-go-sdk/option"
+    )
+    
+    func main() {
+      // Initialize the client with your API key
+      client := worqhat.NewClient(
+        option.WithAPIKey(os.Getenv("WORQHAT_API_KEY")),
+      )
+      
+      // Execute more complex natural language query
+      response, err := client.DB.ProcessNlQuery(context.TODO(), worqhat.DBProcessNlQueryParams{
+        Question: "What were the top 3 product categories by revenue last quarter?",
+        Table: "sales",
+      })
+      
+      // Handle errors
+      if err != nil {
+        fmt.Printf("Error analyzing sales data: %s\n", err.Error())
+        return
+      }
+      
+      // Handle the successful response
+      fmt.Println("Analysis results:")
+      fmt.Printf("%+v\n", response.Data)
+      fmt.Printf("Generated SQL: %s\n", response.SQL)
+    }
+    ```
+  </Tab>
+  
+  <Tab title="cURL" icon="terminal">
+    ```bash
+    # Execute more complex natural language query
+    curl -X POST "https://api.worqhat.com/db/nl-query" \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer YOUR_API_KEY" \
+      -d '{
+        "question": "What were the top 3 product categories by revenue last quarter?",
+        "table": "sales"
+      }'
+    ```
+  </Tab>
+</Tabs>
+
+## Request Body Explained
+
+<ParamField body="question" type="string" required>
+  The natural language question to ask about your data. Be as specific as possible for better results.
+  
+  Examples: "How many active users do we have?", "What was the total revenue last month?", "Which products had the highest sales?"
+</ParamField>
+
+<ParamField body="table" type="string" required>
+  The name of the table to query. This helps the AI understand the context and structure of your data.
+  
+  Example: "users", "orders", "products"
+</ParamField>
+
+## Response Fields Explained
+
+<ResponseField name="success" type="boolean">
+  `true` if the query was executed successfully, `false` otherwise.
+</ResponseField>
+
+<ResponseField name="data" type="array">
+  An array of objects containing the query results. Each object represents a row in the result set.
+</ResponseField>
+
+<ResponseField name="sql" type="string">
+  The SQL query that was generated from your natural language question. This is useful for understanding how the AI interpreted your question.
+</ResponseField>
+
+<ResponseField name="executionTime" type="integer">
+  The time taken to execute the query in milliseconds.
+</ResponseField>
+
+<ResponseField name="message" type="string">
+  A message indicating the status of the query execution.
+</ResponseField>
+
+## Example Response
+
 ```json
 {
   "success": true,
@@ -138,8 +341,36 @@ func main() {
       "count": 157
     }
   ],
-  "generatedQuery": "SELECT COUNT(*) as count FROM users WHERE status = 'active' AND created_at >= DATE_SUB(NOW(), INTERVAL 1 MONTH)",
-  "executionTime": 38
+  "sql": "SELECT COUNT(*) as count FROM users WHERE status = 'active'",
+  "executionTime": 38,
+  "message": "Query processed successfully"
 }
 ```
-</ResponseExample>
+
+## Common Errors and How to Fix Them
+
+| Error | Cause | Solution |
+|-------|-------|----------||
+| "Could not understand question" | Question is too vague or uses unknown terms | Rephrase with more specific language and common terms |
+| "Table not found" | Incorrect table name provided | Verify the table name exists in your database |
+| "Column not found" | Question references fields that don't exist | Use field names that match your database schema |
+| "Query timed out" | Question generates an overly complex query | Simplify your question or break it into smaller parts |
+| "Unauthorized" | Invalid or missing API key | Check that you're using a valid API key |
+
+## Tips for Better Results
+
+- **Be specific**: Include relevant details like time periods, categories, or conditions
+- **Keep it simple**: Start with straightforward questions and gradually increase complexity
+- **Use common terms**: Use terms that match your database schema when possible
+- **Specify the table**: Always provide the correct table name to query
+- **Review the generated SQL**: Check the returned SQL to understand how your question was interpreted
+
+## Example Questions
+
+Here are some examples of natural language questions you can ask:
+
+- "How many users signed up last week?"
+- "What's the average order value for premium customers?"
+- "Show me the top 5 products by sales"
+- "Count active users by country"
+- "What was the total revenue in March 2025?"
