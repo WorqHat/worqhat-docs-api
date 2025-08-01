@@ -84,7 +84,11 @@
           {
             "group": "Workflows",
             "pages": [
-              "api-reference/workflows/metrics"
+              "api-reference/workflows/metrics",
+              "api-reference/workflows/trigger-a-workflow-with-json-payload",
+              "api-reference/workflows/trigger-workflow-json-reference",
+              "api-reference/workflows/trigger-a-workflow-with-file-upload-or-url",
+              "api-reference/workflows/trigger-workflow-file-reference"
             ]
           }
         ]

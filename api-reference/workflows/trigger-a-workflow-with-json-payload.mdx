@@ -1,3 +1,154 @@
 ---
-openapi: post /flows/trigger/{flowId}
+title: 'Trigger Workflow with JSON Payload'
+description: 'Trigger a workflow by its ID with a JSON payload'
 ---
+
+# Trigger Workflow with JSON Payload
+
+Trigger a workflow by its ID with a JSON payload. This endpoint accepts any valid JSON object as the request body and forwards it to the workflow. The workflow ID must be specified in the URL path.
+
+```endpoint
+POST /flows/trigger/{flowId}
+```
+
+## Path Parameters
+
+<ParamField path="flowId" type="string" required>
+  ID of the workflow to trigger
+</ParamField>
+
+## Request Body
+
+The request body can contain any valid JSON object that will be passed to the workflow.
+
+## Response
+
+<ResponseField name="success" type="boolean">
+  Indicates if the workflow was triggered successfully
+</ResponseField>
+
+<ResponseField name="message" type="string">
+  Success message
+</ResponseField>
+
+<ResponseField name="analytics_id" type="string">
+  Unique ID for tracking the workflow execution
+</ResponseField>
+
+<ResponseField name="timestamp" type="string">
+  Timestamp when the workflow was triggered
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  Additional data returned from the workflow trigger
+</ResponseField>
+
+<RequestExample>
+```bash cURL
+curl -X POST "https://api.worqhat.com/flows/trigger/f825ab82-371f-40cb-9bed-b325531ead4a" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -d '{
+    "key1": "value1",
+    "key2": "value2"
+  }'
+```
+
+```javascript Node.js
+import Worqhat from 'worqhat';
+
+const client = new Worqhat({
+  apiKey: process.env.WORQHAT_API_KEY,
+});
+
+async function triggerWorkflow() {
+  try {
+    const response = await client.flows.triggerWithPayload(
+      'f825ab82-371f-40cb-9bed-b325531ead4a',
+      {
+        body: { 
+          key1: 'value1', 
+          key2: 'value2' 
+        },
+      }
+    );
+    
+    console.log(`Workflow triggered with ID: ${response.analytics_id}`);
+    return response;
+  } catch (error) {
+    console.error('Error triggering workflow:', error);
+  }
+}
+
+triggerWorkflow();
+```
+
+```python Python
+from worqhat import Worqhat
+
+# Initialize the client
+client = Worqhat(
+    api_key="YOUR_API_KEY",  # Better to use environment variables
+)
+
+# Trigger workflow with payload
+response = client.flows.trigger_with_payload(
+    flow_id="f825ab82-371f-40cb-9bed-b325531ead4a",
+    body={
+        "key1": "value1",
+        "key2": "value2"
+    }
+)
+
+print(f"Workflow triggered with ID: {response.analytics_id}")
+```
+
+```go Go
+package main
+
+import (
+  "context"
+  "fmt"
+
+  "github.com/WorqHat/worqhat-go-sdk"
+  "github.com/WorqHat/worqhat-go-sdk/option"
+)
+
+func main() {
+  client := worqhat.NewClient(
+    option.WithAPIKey("YOUR_API_KEY"),  // Better to use environment variables
+  )
+  
+  response, err := client.Flows.TriggerWithPayload(
+    context.TODO(),
+    "f825ab82-371f-40cb-9bed-b325531ead4a",
+    worqhat.FlowTriggerWithPayloadParams{
+      Body: map[string]interface{}{
+        "key1": "value1",
+        "key2": "value2",
+      },
+    },
+  )
+  if err != nil {
+    panic(err.Error())
+  }
+  
+  fmt.Printf("Workflow triggered with ID: %s\n", response.AnalyticsID)
+}
+```
+</RequestExample>
+
+<ResponseExample>
+```json
+{
+  "success": true,
+  "message": "Workflow f825ab82-371f-40cb-9bed-b325531ead4a triggered successfully",
+  "analytics_id": "1f9152dc-dec8-496f-8ba4-ed1c27a72684",
+  "timestamp": "2025-07-26T03:28:08.123Z",
+  "data": {
+    "workflow_status": "started",
+    "additional_data": "from backend response"
+  }
+}
+```
+</ResponseExample>

@@ -1,3 +1,263 @@
 ---
-openapi: post /flows/file/{flowId}
+title: 'Trigger Workflow with File Upload or URL'
+description: 'Trigger a workflow by its ID with either a file upload or a URL to a file'
 ---
+
+# Trigger Workflow with File Upload or URL
+
+Trigger a workflow by its ID with either a file upload or a URL to a file. This endpoint accepts multipart/form-data with either a file field or a URL field. When a URL is provided, the server will download the file and process it as if it were directly uploaded.
+
+```endpoint
+POST /flows/file/{flowId}
+```
+
+## Path Parameters
+
+<ParamField path="flowId" type="string" required>
+  ID of the workflow to trigger
+</ParamField>
+
+## Request Body
+
+The request body should be formatted as `multipart/form-data` and must include either a file upload or a URL to a file.
+
+<ParamField body="file" type="file">
+  File to upload and process (mutually exclusive with url)
+</ParamField>
+
+<ParamField body="url" type="string">
+  URL to a file to download and process (mutually exclusive with file)
+</ParamField>
+
+<ParamField body="metadata" type="object">
+  Optional metadata to include with the request
+</ParamField>
+
+## Response
+
+<ResponseField name="success" type="boolean">
+  Indicates if the workflow was triggered successfully
+</ResponseField>
+
+<ResponseField name="message" type="string">
+  Success message
+</ResponseField>
+
+<ResponseField name="timestamp" type="string">
+  Timestamp when the workflow was triggered
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  Additional data returned from the workflow trigger
+</ResponseField>
+
+<RequestExample>
+```bash File Upload
+curl -X POST "https://api.worqhat.com/flows/file/f825ab82-371f-40cb-9bed-b325531ead4a" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -F "file=@/path/to/your/file.pdf" \
+  -F "metadata={\"key1\":\"value1\",\"key2\":\"value2\"}"
+```
+
+```bash URL Input
+curl -X POST "https://api.worqhat.com/flows/file/f825ab82-371f-40cb-9bed-b325531ead4a" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -F "url=https://example.com/path/to/file.pdf" \
+  -F "metadata={\"key1\":\"value1\",\"key2\":\"value2\"}"
+```
+
+```javascript Node.js (File Upload)
+import Worqhat from 'worqhat';
+import fs from 'fs';
+import path from 'path';
+
+const client = new Worqhat({
+  apiKey: process.env.WORQHAT_API_KEY,
+});
+
+async function triggerWorkflowWithFile() {
+  try {
+    const filePath = path.resolve('./document.pdf');
+    const fileBuffer = fs.readFileSync(filePath);
+    
+    const response = await client.flows.triggerWithFile(
+      'f825ab82-371f-40cb-9bed-b325531ead4a',
+      {
+        file: fileBuffer,
+        metadata: {
+          key1: 'value1',
+          key2: 'value2'
+        }
+      }
+    );
+    
+    console.log(`Workflow triggered successfully: ${response.message}`);
+    return response;
+  } catch (error) {
+    console.error('Error triggering workflow with file:', error);
+  }
+}
+
+triggerWorkflowWithFile();
+```
+
+```javascript Node.js (URL Input)
+import Worqhat from 'worqhat';
+
+const client = new Worqhat({
+  apiKey: process.env.WORQHAT_API_KEY,
+});
+
+async function triggerWorkflowWithUrl() {
+  try {
+    const response = await client.flows.triggerWithFile(
+      'f825ab82-371f-40cb-9bed-b325531ead4a',
+      {
+        url: 'https://example.com/path/to/file.pdf',
+        metadata: {
+          key1: 'value1',
+          key2: 'value2'
+        }
+      }
+    );
+    
+    console.log(`Workflow triggered successfully: ${response.message}`);
+    return response;
+  } catch (error) {
+    console.error('Error triggering workflow with URL:', error);
+  }
+}
+
+triggerWorkflowWithUrl();
+```
+
+```python Python (File Upload)
+from worqhat import Worqhat
+
+# Initialize the client
+client = Worqhat(
+    api_key="YOUR_API_KEY",  # Better to use environment variables
+)
+
+# Trigger workflow with file
+with open("./document.pdf", "rb") as file:
+    response = client.flows.trigger_with_file(
+        flow_id="f825ab82-371f-40cb-9bed-b325531ead4a",
+        file=file,
+        metadata={
+            "key1": "value1",
+            "key2": "value2"
+        }
+    )
+
+print(f"Workflow triggered successfully: {response.message}")
+```
+
+```python Python (URL Input)
+from worqhat import Worqhat
+
+# Initialize the client
+client = Worqhat(
+    api_key="YOUR_API_KEY",  # Better to use environment variables
+)
+
+# Trigger workflow with URL
+response = client.flows.trigger_with_file(
+    flow_id="f825ab82-371f-40cb-9bed-b325531ead4a",
+    url="https://example.com/path/to/file.pdf",
+    metadata={
+        "key1": "value1",
+        "key2": "value2"
+    }
+)
+
+print(f"Workflow triggered successfully: {response.message}")
+```
+
+```go Go
+package main
+
+import (
+  "context"
+  "fmt"
+  "os"
+
+  "github.com/WorqHat/worqhat-go-sdk"
+  "github.com/WorqHat/worqhat-go-sdk/option"
+)
+
+func main() {
+  client := worqhat.NewClient(
+    option.WithAPIKey("YOUR_API_KEY"),  // Better to use environment variables
+  )
+  
+  // Option 1: With file
+  file, err := os.Open("./document.pdf")
+  if err != nil {
+    panic(err.Error())
+  }
+  defer file.Close()
+  
+  response, err := client.Flows.TriggerWithFile(
+    context.TODO(),
+    "f825ab82-371f-40cb-9bed-b325531ead4a",
+    worqhat.FlowTriggerWithFileParams{
+      File: file,
+      Metadata: map[string]interface{}{
+        "key1": "value1",
+        "key2": "value2",
+      },
+    },
+  )
+  if err != nil {
+    panic(err.Error())
+  }
+  
+  fmt.Printf("Workflow triggered successfully: %s\n", response.Message)
+  
+  // Option 2: With URL
+  urlResponse, err := client.Flows.TriggerWithFile(
+    context.TODO(),
+    "f825ab82-371f-40cb-9bed-b325531ead4a",
+    worqhat.FlowTriggerWithFileParams{
+      URL: "https://example.com/path/to/file.pdf",
+      Metadata: map[string]interface{}{
+        "key1": "value1",
+        "key2": "value2",
+      },
+    },
+  )
+  if err != nil {
+    panic(err.Error())
+  }
+  
+  fmt.Printf("Workflow triggered successfully: %s\n", urlResponse.Message)
+}
+```
+</RequestExample>
+
+<ResponseExample>
+```json File Upload Response
+{
+  "success": true,
+  "message": "Workflow triggered successfully with file upload",
+  "timestamp": "2025-07-26T03:28:08.123Z",
+  "data": {
+    "workflow_status": "started",
+    "additional_data": "from backend response"
+  }
+}
+```
+
+```json URL Download Response
+{
+  "success": true,
+  "message": "Workflow triggered successfully with file downloaded from URL",
+  "timestamp": "2025-07-26T03:28:08.123Z",
+  "data": {
+    "workflow_status": "started",
+    "additional_data": "from backend response"
+  }
+}
+```
+</ResponseExample>
