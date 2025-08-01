@@ -78,10 +78,10 @@
           {
             "group": "Database",
             "pages": [
-              "docs/database/query",
               "docs/database/insert",
               "docs/database/update",
               "docs/database/delete",
+              "docs/database/query",
               "docs/database/natural-language-query"
             ]
           },
