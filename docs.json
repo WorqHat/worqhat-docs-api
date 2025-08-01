@@ -68,12 +68,9 @@
             "group": "Introduction",
             "pages": ["docs/get-started", "docs/quickstart", "docs/rate-limit"]
           },
-                    {
+          {
             "group": "System",
-            "pages": [
-              "docs/system/health",
-              "docs/system/info"
-            ]
+            "pages": ["docs/system/health", "docs/system/info"]
           },
           {
             "group": "Database",
@@ -129,9 +126,9 @@
     "global": {
       "anchors": [
         {
-          "anchor": "API Reference",
-          "icon": "terminal",
-          "href": "https://docs.worqhat.com"
+          "anchor": "Changelog",
+          "icon": "pen-clip",
+          "href": "https://updates.worqhat.com"
         },
 
         {
