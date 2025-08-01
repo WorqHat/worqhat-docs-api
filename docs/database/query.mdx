@@ -3,112 +3,320 @@ title: 'Execute SQL Query'
 description: 'Execute a raw SQL query against the database'
 ---
 
-# Execute SQL Query
-
-Execute a raw SQL query directly against WorqDB. This endpoint provides direct SQL access with security guardrails to prevent destructive operations.
+Executes a raw SQL query directly against WorqDB. This endpoint provides direct SQL access with security guardrails to prevent destructive operations.
 
 ```endpoint
-POST /db/query
+POST https://api.worqhat.com/db/query
 ```
 
-## Request Body
+## What Does This Endpoint Do?
+
+This endpoint allows you to execute SQL queries directly against your database. Think of it like having direct access to your database through SQL, but with safety measures in place to prevent accidental data loss or destructive operations.
+
+## When to Use SQL Queries
+
+You'll find this endpoint useful when you need to:
+
+- **Run complex queries**: Perform advanced data analysis with SQL
+- **Generate reports**: Create custom reports with aggregations and calculations
+- **Fetch specific data**: Retrieve exactly what you need with precise SQL queries
+- **Run analytical queries**: Perform calculations and aggregations on your data
+- **Use SQL functions**: Leverage SQL's built-in functions for data manipulation
+- **Perform bulk operations**: Execute operations on multiple records efficiently
+
+## How It Works
+
+1. You provide a **SQL query** to execute
+2. The API runs your query against the database with security guardrails
+3. The results are returned as an array of objects
+
+## Code Examples
+
+### Example: Basic SQL Query
+
+This example shows how to execute a simple SQL query to retrieve active users.
+
+<Tabs>
+  <Tab title="Node.js" icon="js">
+    ```javascript
+    import Worqhat from 'worqhat';
+    
+    // Initialize the client with your API key
+    const client = new Worqhat({
+      apiKey: process.env.WORQHAT_API_KEY, // Always use environment variables for API keys
+    });
+    
+    async function fetchActiveUsers() {
+      try {
+        // Call the executeQuery method
+        const response = await client.db.executeQuery({
+          query: "SELECT * FROM users WHERE status = 'active' LIMIT 10"
+        });
+        
+        // Handle the successful response
+        console.log(`Found ${response.data.length} active users`);
+        console.log('Query execution time:', response.executionTime, 'ms');
+        console.log('Results:', response.data);
+        return response;
+      } catch (error) {
+        // Handle any errors
+        console.error('Error executing query:', error.message);
+      }
+    }
+    
+    // Call the function
+    fetchActiveUsers();
+    ```
+  </Tab>
+  
+  <Tab title="Python" icon="python">
+    ```python
+    from worqhat import Worqhat
+    import os
+    
+    # Initialize the client with your API key
+    client = Worqhat(
+        api_key=os.environ.get("WORQHAT_API_KEY"),  # Using environment variables for security
+    )
+    
+    # Execute SQL query
+    try:
+        response = client.db.execute_query(
+            query="SELECT * FROM users WHERE status = 'active' LIMIT 10"
+        )
+        
+        # Handle the successful response
+        print(f"Found {len(response.data)} active users")
+        print(f"Query execution time: {response.execution_time} ms")
+        print(f"Results: {response.data}")
+    except Exception as e:
+        # Handle any errors
+        print(f"Error executing query: {str(e)}")
+    ```
+  </Tab>
+  
+  <Tab title="Go" icon="golang">
+    ```go
+    package main
+    
+    import (
+      "context"
+      "fmt"
+      "os"
+    
+      "github.com/WorqHat/worqhat-go-sdk"
+      "github.com/WorqHat/worqhat-go-sdk/option"
+    )
+    
+    func main() {
+      // Initialize the client with your API key
+      client := worqhat.NewClient(
+        option.WithAPIKey(os.Getenv("WORQHAT_API_KEY")),  // Using environment variables
+      )
+      
+      // Execute SQL query
+      response, err := client.DB.ExecuteQuery(context.TODO(), worqhat.DBExecuteQueryParams{
+        Query: "SELECT * FROM users WHERE status = 'active' LIMIT 10",
+      })
+      
+      // Handle errors
+      if err != nil {
+        fmt.Printf("Error executing query: %s\n", err.Error())
+        return
+      }
+      
+      // Handle the successful response
+      fmt.Printf("Found %d active users\n", len(response.Data))
+      fmt.Printf("Query execution time: %d ms\n", response.ExecutionTime)
+      fmt.Printf("Results: %+v\n", response.Data)
+    }
+    ```
+  </Tab>
+  
+  <Tab title="cURL" icon="terminal">
+    ```bash
+    # Execute SQL query
+    curl -X POST "https://api.worqhat.com/db/query" \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer YOUR_API_KEY" \
+      -d '{
+        "query": "SELECT * FROM users WHERE status = \'active\' LIMIT 10"
+      }'
+    ```
+  </Tab>
+</Tabs>
+
+### Example: Advanced SQL Query
+
+This example shows how to execute a more complex SQL query with aggregations.
+
+<Tabs>
+  <Tab title="Node.js" icon="js">
+    ```javascript
+    import Worqhat from 'worqhat';
+    
+    // Initialize the client with your API key
+    const client = new Worqhat({
+      apiKey: process.env.WORQHAT_API_KEY,
+    });
+    
+    async function generateSalesReport() {
+      try {
+        // Complex SQL query with aggregations
+        const query = `
+          SELECT 
+            category, 
+            COUNT(*) as order_count, 
+            SUM(quantity) as total_items, 
+            SUM(price * quantity) as total_revenue
+          FROM orders
+          WHERE order_date >= '2025-01-01'
+          GROUP BY category
+          ORDER BY total_revenue DESC
+        `;
+        
+        // Execute the query
+        const response = await client.db.executeQuery({ query });
+        
+        // Handle the successful response
+        console.log('Sales report generated successfully');
+        console.log('Report data:', response.data);
+        return response;
+      } catch (error) {
+        console.error('Error generating sales report:', error.message);
+      }
+    }
+    
+    generateSalesReport();
+    ```
+  </Tab>
+  
+  <Tab title="Python" icon="python">
+    ```python
+    from worqhat import Worqhat
+    import os
+    
+    # Initialize the client with your API key
+    client = Worqhat(
+        api_key=os.environ.get("WORQHAT_API_KEY"),
+    )
+    
+    # Complex SQL query with aggregations
+    query = """
+        SELECT 
+            category, 
+            COUNT(*) as order_count, 
+            SUM(quantity) as total_items, 
+            SUM(price * quantity) as total_revenue
+        FROM orders
+        WHERE order_date >= '2025-01-01'
+        GROUP BY category
+        ORDER BY total_revenue DESC
+    """
+    
+    # Execute the query
+    try:
+        response = client.db.execute_query(query=query)
+        
+        # Handle the successful response
+        print("Sales report generated successfully")
+        print(f"Report data: {response.data}")
+    except Exception as e:
+        print(f"Error generating sales report: {str(e)}")
+    ```
+  </Tab>
+  
+  <Tab title="Go" icon="golang">
+    ```go
+    package main
+    
+    import (
+      "context"
+      "fmt"
+      "os"
+    
+      "github.com/WorqHat/worqhat-go-sdk"
+      "github.com/WorqHat/worqhat-go-sdk/option"
+    )
+    
+    func main() {
+      // Initialize the client with your API key
+      client := worqhat.NewClient(
+        option.WithAPIKey(os.Getenv("WORQHAT_API_KEY")),
+      )
+      
+      // Complex SQL query with aggregations
+      query := `
+        SELECT 
+          category, 
+          COUNT(*) as order_count, 
+          SUM(quantity) as total_items, 
+          SUM(price * quantity) as total_revenue
+        FROM orders
+        WHERE order_date >= '2025-01-01'
+        GROUP BY category
+        ORDER BY total_revenue DESC
+      `
+      
+      // Execute the query
+      response, err := client.DB.ExecuteQuery(context.TODO(), worqhat.DBExecuteQueryParams{
+        Query: query,
+      })
+      
+      // Handle errors
+      if err != nil {
+        fmt.Printf("Error generating sales report: %s\n", err.Error())
+        return
+      }
+      
+      // Handle the successful response
+      fmt.Println("Sales report generated successfully")
+      fmt.Printf("Report data: %+v\n", response.Data)
+    }
+    ```
+  </Tab>
+  
+  <Tab title="cURL" icon="terminal">
+    ```bash
+    # Execute complex SQL query
+    curl -X POST "https://api.worqhat.com/db/query" \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer YOUR_API_KEY" \
+      -d '{
+        "query": "SELECT category, COUNT(*) as order_count, SUM(quantity) as total_items, SUM(price * quantity) as total_revenue FROM orders WHERE order_date >= \'2025-01-01\' GROUP BY category ORDER BY total_revenue DESC"
+      }'
+    ```
+  </Tab>
+</Tabs>
+
+## Request Body Explained
 
 <ParamField body="query" type="string" required>
-  SQL query to execute
+  The SQL query to execute against the database. This can be any valid SQL query that reads data (SELECT statements).
+  
+  For security reasons, certain operations may be restricted to prevent accidental data loss or unauthorized access.
 </ParamField>
 
-## Response
+## Response Fields Explained
 
 <ResponseField name="success" type="boolean">
-  Indicates if the query was executed successfully
+  `true` if the query was executed successfully, `false` otherwise.
 </ResponseField>
 
 <ResponseField name="data" type="array">
-  The query results as an array of objects
+  An array of objects containing the query results. Each object represents a row in the result set, with properties corresponding to the columns in your query.
 </ResponseField>
 
 <ResponseField name="query" type="string">
-  The executed SQL query
+  The SQL query that was executed. This is useful for debugging and audit purposes.
 </ResponseField>
 
 <ResponseField name="executionTime" type="integer">
-  Query execution time in milliseconds
+  The time taken to execute the query in milliseconds. This can help you optimize slow queries.
 </ResponseField>
 
-<RequestExample>
-```bash cURL
-curl -X POST "https://api.worqhat.com/db/query" \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer YOUR_API_KEY" \
-  -d '{"query": "SELECT * FROM users WHERE status = \'active\' LIMIT 10"}'
-```
+## Example Response
 
-```javascript Node.js
-import Worqhat from 'worqhat';
-
-const client = new Worqhat({
-  apiKey: process.env.WORQHAT_API_KEY,
-});
-
-async function executeQuery() {
-  try {
-    const response = await client.db.executeQuery({
-      query: "SELECT * FROM users WHERE status = 'active' LIMIT 10",
-    });
-    console.log(response.data);
-    return response;
-  } catch (error) {
-    console.error('Error executing query:', error);
-  }
-}
-
-executeQuery();
-```
-
-```python Python
-from worqhat import Worqhat
-
-# Initialize the client
-client = Worqhat(
-    api_key="YOUR_API_KEY",  # Better to use environment variables
-)
-
-# Execute query
-response = client.db.execute_query(
-    query="SELECT * FROM users WHERE status = 'active' LIMIT 10",
-)
-print(response.data)
-```
-
-```go Go
-package main
-
-import (
-  "context"
-  "fmt"
-
-  "github.com/WorqHat/worqhat-go-sdk"
-  "github.com/WorqHat/worqhat-go-sdk/option"
-)
-
-func main() {
-  client := worqhat.NewClient(
-    option.WithAPIKey("YOUR_API_KEY"),  // Better to use environment variables
-  )
-  
-  response, err := client.DB.ExecuteQuery(context.TODO(), worqhat.DBExecuteQueryParams{
-    Query: "SELECT * FROM users WHERE status = 'active' LIMIT 10",
-  })
-  if err != nil {
-    panic(err.Error())
-  }
-  
-  fmt.Printf("%+v\n", response.Data)
-}
-```
-</RequestExample>
-
-<ResponseExample>
 ```json
 {
   "success": true,
@@ -117,19 +325,35 @@ func main() {
       "id": "user_123",
       "name": "John Doe",
       "email": "john@example.com",
-      "status": "active",
-      "created_at": "2025-07-01T12:00:00Z"
+      "status": "active"
     },
     {
       "id": "user_456",
       "name": "Jane Smith",
       "email": "jane@example.com",
-      "status": "active",
-      "created_at": "2025-07-02T14:30:00Z"
+      "status": "active"
     }
   ],
   "query": "SELECT * FROM users WHERE status = 'active' LIMIT 10",
   "executionTime": 42
 }
 ```
-</ResponseExample>
+
+## Common Errors and How to Fix Them
+
+| Error | Cause | Solution |
+|-------|-------|----------|
+| "Table not found" | The specified table doesn't exist | Check your table name for typos |
+| "Syntax error in SQL query" | The SQL query contains syntax errors | Review your SQL syntax and fix any errors |
+| "Operation not allowed" | You're trying to perform a restricted operation | Use only allowed operations (typically SELECT statements) |
+| "Query timeout" | The query took too long to execute | Optimize your query or add more specific conditions |
+| "Unauthorized" | Invalid or missing API key | Check that you're using a valid API key |
+
+## Tips for Successful Queries
+
+- **Use LIMIT clauses** to restrict the number of results returned
+- **Be specific with your SELECT columns** rather than using SELECT *
+- **Add appropriate WHERE clauses** to filter results
+- **Use indexes** when querying large tables
+- **Test complex queries** on small datasets first
+- **Consider query performance** for production applications
