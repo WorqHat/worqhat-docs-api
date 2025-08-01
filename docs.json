@@ -39,7 +39,13 @@
     "decoration": "windows"
   },
   "api": {
-    "openapi": "openapi.yaml"
+    "openapi": "openapi.yaml",
+    "playground": {
+      "display": "interactive"
+    },
+    "examples": {
+      "languages": ["javascript", "curl", "python", "go", "java", "typescript"]
+    }
   },
   "footer": {
     "socials": {
@@ -49,6 +55,9 @@
       "instagram": "https://instagram.com/worqhat",
       "youtube": "https://www.youtube.com/@worqhat"
     }
+  },
+  "contextual": {
+    "options": ["copy", "view", "chatgpt", "claude"]
   },
   "navigation": {
     "tabs": [
@@ -64,27 +73,35 @@
       {
         "tab": "API Reference",
         "groups": [
-                      {
+          {
             "group": "System",
             "pages": [
               "api-reference/system/health",
-              "api-reference/system/info"
+              "api-reference/system/health-check",
+              "api-reference/system/info",
+              "api-reference/system/server-information"
             ]
           },
           {
             "group": "Database",
             "pages": [
               "api-reference/database/query",
+              "api-reference/database/execute-raw-sql-query",
               "api-reference/database/insert",
+              "api-reference/database/insert-data-into-a-table",
               "api-reference/database/update",
+              "api-reference/database/update-data-in-a-table",
               "api-reference/database/delete",
-              "api-reference/database/natural-language-query"
+              "api-reference/database/delete-data-from-a-table",
+              "api-reference/database/natural-language-query",
+              "api-reference/database/process-natural-language-query"
             ]
           },
           {
             "group": "Workflows",
             "pages": [
               "api-reference/workflows/metrics",
+              "api-reference/workflows/get-workflow-metrics",
               "api-reference/workflows/trigger-a-workflow-with-json-payload",
               "api-reference/workflows/trigger-workflow-json-reference",
               "api-reference/workflows/trigger-a-workflow-with-file-upload-or-url",
