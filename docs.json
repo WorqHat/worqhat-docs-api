@@ -89,6 +89,16 @@
               "docs/workflows/trigger-a-workflow-with-json-payload",
               "docs/workflows/trigger-a-workflow-with-file-upload-or-url"
             ]
+          },
+          {
+            "group": "Policies",
+            "pages": [
+              "docs/policies/terms-of-services",
+              "docs/policies/privacy-policy",
+              "docs/policies/acceptable-use-policy",
+              "docs/policies/data-usage-policy",
+              "docs/policies/bugs-disclosure-policy"
+            ]
           }
         ]
       },
