@@ -14,6 +14,8 @@ File-based triggers allow you to send files to your workflows for processing. Wo
 1. **Direct File Upload**: Upload a file directly from your application or system
 2. **URL-Based Processing**: Provide a URL to a publicly accessible file that WorqHat will download and process
 
+Additionally, you can include custom parameters alongside your file or URL to provide context or configuration for your workflow.
+
 ## When to Use File-Based Triggers
 
 File-based workflow triggers are ideal for scenarios like:
@@ -313,7 +315,9 @@ If you need to trigger workflows with files directly from the command line or in
 curl -X POST "https://api.worqhat.com/flows/file/your-workflow-id" \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -F "file=@/path/to/your/file.pdf" \
-  -F "metadata={\"company\":\"Acme Corp\",\"priority\":\"high\"}"
+  -F "metadata={\"company\":\"Acme Corp\",\"priority\":\"high\"}" \
+  -F "input1=value1" \
+  -F "input2=value2"
 ```
 
 ### Option 2: URL Input with cURL
@@ -322,7 +326,9 @@ curl -X POST "https://api.worqhat.com/flows/file/your-workflow-id" \
 curl -X POST "https://api.worqhat.com/flows/file/your-workflow-id" \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -F "url=https://example.com/path/to/file.pdf" \
-  -F "metadata={\"company\":\"Acme Corp\",\"priority\":\"high\"}"
+  -F "metadata={\"company\":\"Acme Corp\",\"priority\":\"high\"}" \
+  -F "input1=value1" \
+  -F "input2=value2"
 ```
 
 ## Working with Responses
@@ -344,6 +350,98 @@ A typical response includes:
   }
 }
 ```
+
+## Request Body Format
+
+The API accepts `multipart/form-data` with the following fields:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `file` | File | The file to upload (required if not using URL) |
+| `url` | String | URL to a file to be downloaded and processed (required if not uploading a file) |
+| `metadata` | JSON String | Optional JSON metadata to provide context for the workflow |
+| `[custom parameters]` | String/Number/Boolean | Any additional parameters needed by your workflow |
+
+All form fields are forwarded to the workflow, allowing you to include any custom parameters your workflow needs to process the file correctly.
+
+## Combining File Uploads with Additional Parameters
+
+For complex workflows, you can include both file uploads (or URLs) and additional parameters in the same request:
+
+<Tabs>
+  <Tab title="Node.js" icon="js">
+    ```javascript
+    import Worqhat from 'worqhat';
+    import fs from 'fs';
+    
+    const client = new Worqhat({
+      apiKey: process.env.WORQHAT_API_KEY,
+    });
+    
+    async function processDocumentWithParams() {
+      try {
+        const fileStream = fs.createReadStream('./contract.pdf');
+        
+        // Add metadata and additional parameters
+        const response = await client.flows.triggerWithFile(
+          'document-processing-workflow-id',
+          {
+            file: fileStream,
+            metadata: {
+              documentType: "contract",
+              priority: "high"
+            },
+            // Additional parameters
+            customerId: "CID-12345",
+            department: "legal",
+            requireSignature: true,
+            processingMode: "detailed"
+          }
+        );
+        
+        console.log(`Document processing started! Tracking ID: ${response.analytics_id}`);
+        return response;
+      } catch (error) {
+        console.error('Error processing document:', error);
+      }
+    }
+    ```
+  </Tab>
+  
+  <Tab title="Python" icon="python">
+    ```python
+    from worqhat import Worqhat
+    import os
+    
+    client = Worqhat(
+        api_key=os.environ.get("WORQHAT_API_KEY"),
+    )
+    
+    def process_document_with_params(file_path):
+        try:
+            with open(file_path, 'rb') as file:
+                # Trigger the workflow with file and additional parameters
+                response = client.flows.trigger_with_file(
+                    workflow_id="document-processing-workflow-id",
+                    file=file,
+                    metadata={
+                        "documentType": "contract",
+                        "priority": "high"
+                    },
+                    # Additional parameters
+                    customerId="CID-12345",
+                    department="legal",
+                    requireSignature=True,
+                    processingMode="detailed"
+                )
+                
+                print(f"Document processing started! Tracking ID: {response.analytics_id}")
+                return response
+        except Exception as e:
+            print(f"Error processing document: {str(e)}")
+    ```
+  </Tab>
+</Tabs>
 
 ## Best Practices
 
@@ -591,26 +689,6 @@ const response = await client.flows.triggerWithFile('video-analysis-workflow-id'
   }
 });
 ```
-
-## Request Body Format
-
-The API accepts `multipart/form-data` with the following fields:
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `file` | File | The file to upload (required if not using URL) |
-| `url` | String | URL to a file to be downloaded and processed (required if not uploading a file) |
-| `metadata` | JSON String | Optional JSON metadata to provide context for the workflow |
-
-Additional form fields can be included as needed and will be forwarded to the workflow.
-
-## Combining File Uploads with JSON Payloads
-
-For complex workflows, you might want to use both file uploads and JSON payloads together. This can be achieved by:
-
-1. First uploading the file using the file-based trigger
-2. Using the `analytics_id` from the response to correlate with subsequent JSON payload triggers
-3. Including the `analytics_id` in your JSON payload to link the processes
 
 ## Conclusion
 
