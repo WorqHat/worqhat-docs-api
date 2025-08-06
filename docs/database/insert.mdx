@@ -333,10 +333,12 @@ This example shows how to insert a record with a custom documentId that you spec
   `true` if the insert was successful, `false` otherwise.
 </ResponseField>
 
-<ResponseField name="data" type="object">
-  The complete inserted record, including:
-  - Any auto-generated fields like `documentId` (if you didn't specify one)
-  - All the data you provided in the request
+<ResponseField name="data" type="object | array">
+  For single record inserts:
+  - The complete inserted record as an object, including any auto-generated fields like `documentId` (if you didn't specify one) and all the data you provided in the request.
+  
+  For batch inserts:
+  - An array of objects, where each object represents a successfully inserted record with its complete data.
 </ResponseField>
 
 <ResponseField name="message" type="string">
@@ -344,6 +346,8 @@ This example shows how to insert a record with a custom documentId that you spec
 </ResponseField>
 
 ## Example Response
+
+### Single Record Insert
 
 ```json
 {
@@ -356,6 +360,38 @@ This example shows how to insert a record with a custom documentId that you spec
     "active": true
   },
   "message": "Record inserted successfully"
+}
+```
+
+### Batch Insert
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "documentId": "doc_12345abcde",
+      "name": "Basic Widget",
+      "price": 19.99,
+      "inStock": true,
+      "category": "essentials"
+    },
+    {
+      "documentId": "doc_67890fghij",
+      "name": "Standard Widget",
+      "price": 49.99,
+      "inStock": true,
+      "category": "essentials"
+    },
+    {
+      "documentId": "doc_54321klmno",
+      "name": "Premium Widget",
+      "price": 99.99,
+      "inStock": false,
+      "category": "premium"
+    }
+  ],
+  "message": "3 records inserted successfully"
 }
 ```
 
