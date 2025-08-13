@@ -36,6 +36,81 @@ Before triggering a workflow with files, you'll need:
 3. The workflow ID of the workflow you want to trigger
 4. Files to process or URLs pointing to files
 
+## Quickstart: Trigger with File or URL
+
+The SDKs accept a single payload object/dict as the second argument that contains either `file` or `url` plus any additional inputs your workflow expects.
+
+<Tabs>
+  <Tab title="Python" icon="python">
+    ```python
+    from pathlib import Path
+    from typing import Any, Dict
+    from worqhat import Worqhat
+    import os
+
+    client = Worqhat(api_key=os.environ.get("API_KEY", ""))
+
+    def trigger_flow_with_file() -> Dict[str, Any]:
+        """Trigger a workflow with a local file upload."""
+        workflow_id = "e3f35867-77f4-4c49-b376-ac0f0cedb423"
+        image_path = Path(__file__).parent / "image.png"
+        with open(image_path, "rb") as f:
+            return client.flows.trigger_with_file(
+                workflow_id,
+                {"file": f, "input1": "value1", "input2": "value2"},
+            )
+
+    def trigger_flow_with_url() -> Dict[str, Any]:
+        """Trigger a workflow with a remote file URL."""
+        workflow_id = "e3f35867-77f4-4c49-b376-ac0f0cedb423"
+        url = "https://assets.worqhat.com/worqkitties/kitty-hi.png"
+        return client.flows.trigger_with_file(
+            workflow_id,
+            {"url": url, "input1": "value1", "input2": "value2"},
+        )
+    ```
+  </Tab>
+
+  <Tab title="Node.js" icon="js">
+    ```javascript
+    import dotenv from "dotenv";
+    import Worqhat from "worqhat";
+    import fs from "fs";
+    import path from "path";
+
+    dotenv.config();
+
+    const API_KEY = process.env.API_KEY || "";
+
+    export const client = new Worqhat({
+      apiKey: API_KEY,
+    });
+
+    export async function triggerFlowWithFile() {
+      const workflow_id = "e3f35867-77f4-4c49-b376-ac0f0cedb423";
+      const filePath = path.join(__dirname, "../image.png");
+      const response = await client.flows.triggerWithFile(workflow_id, {
+        file: fs.createReadStream(filePath),
+        input1: "value1",
+        input2: "value2",
+      });
+      console.log(JSON.stringify(response, null, 2));
+    }
+
+    export async function triggerFlowWithUrl() {
+      const workflow_id = "e3f35867-77f4-4c49-b376-ac0f0cedb423";
+      const url = "https://assets.worqhat.com/worqkitties/kitty-hi.png";
+      const response = await client.flows.triggerWithFile(workflow_id, {
+        url: url,
+        input1: "value1",
+        input2: "value2",
+      });
+      console.log(JSON.stringify(response, null, 2));
+    }
+    ```
+  </Tab>
+</Tabs>
+
 ## Sending Files to a Workflow
 
 ### API Endpoint
@@ -68,20 +143,16 @@ WorqHat provides multiple ways to upload files directly to your workflows, makin
         const filePath = path.resolve('./contract.pdf');
         const fileStream = fs.createReadStream(filePath);
         
-        // Add metadata to provide context for the workflow
-        const metadata = {
-          documentType: "contract",
-          priority: "high",
-          department: "legal",
-          requestedBy: "jane.smith@example.com"
-        };
-        
         // Trigger the document processing workflow
         const response = await client.flows.triggerWithFile(
           'document-processing-workflow-id',
           {
             file: fileStream,  // Pass the stream directly
-            metadata: metadata
+            // Additional fields go directly on the payload
+            documentType: "contract",
+            priority: "high",
+            department: "legal",
+            requestedBy: "jane.smith@example.com"
           }
         );
         
@@ -112,18 +183,14 @@ WorqHat provides multiple ways to upload files directly to your workflows, makin
         const fileInput = document.getElementById('fileInput');
         const file = fileInput.files[0]; // File API object
         
-        // Add metadata
-        const metadata = {
-          documentType: "contract",
-          uploadedBy: "user@example.com"
-        };
-        
         // Trigger the workflow with the File object
         const response = await client.flows.triggerWithFile(
           'document-processing-workflow-id',
           {
             file: file,  // Browser File object works directly
-            metadata: metadata
+            // Additional fields go directly on the payload
+            documentType: "contract",
+            uploadedBy: "user@example.com"
           }
         );
         
@@ -154,18 +221,16 @@ WorqHat provides multiple ways to upload files directly to your workflows, makin
         try:
             # Open the file in binary mode
             with open(file_path, 'rb') as file:
-                # Add metadata
-                metadata = {
-                    "documentType": "contract",
-                    "priority": "high",
-                    "department": "legal"
-                }
-                
                 # Trigger the workflow
                 response = client.flows.trigger_with_file(
-                    workflow_id="document-processing-workflow-id",
-                    file=file,
-                    metadata=metadata
+                    "document-processing-workflow-id",
+                    {
+                        "file": file,
+                        # Additional fields go directly on the payload
+                        "documentType": "contract",
+                        "priority": "high",
+                        "department": "legal",
+                    },
                 )
                 
                 print(f"Document processing started! Tracking ID: {response.analytics_id}")
@@ -196,19 +261,15 @@ When the file is available at a URL (such as in cloud storage or a public web lo
     
     async function processRemoteImage() {
       try {
-        // Metadata to provide context for the workflow
-        const metadata = {
-          imageType: "product",
-          category: "electronics",
-          productId: "PROD-12345"
-        };
-        
         // Trigger the image analysis workflow with a URL
         const response = await client.flows.triggerWithFile(
           'image-analysis-workflow-id',
           {
             url: 'https://storage.example.com/products/laptop-x1.jpg',
-            metadata: metadata
+            // Additional fields go directly on the payload
+            imageType: "product",
+            category: "electronics",
+            productId: "PROD-12345"
           }
         );
         
@@ -236,18 +297,16 @@ When the file is available at a URL (such as in cloud storage or a public web lo
     
     def process_remote_image():
         try:
-            # Metadata to provide context for the workflow
-            metadata = {
-                "imageType": "product",
-                "category": "electronics",
-                "productId": "PROD-12345"
-            }
-            
             # Trigger the workflow with a URL
             response = client.flows.trigger_with_file(
-                workflow_id="image-analysis-workflow-id",
-                url="https://storage.example.com/products/laptop-x1.jpg",
-                metadata=metadata
+                "image-analysis-workflow-id",
+                {
+                    "url": "https://storage.example.com/products/laptop-x1.jpg",
+                    # Additional fields go directly on the payload
+                    "imageType": "product",
+                    "category": "electronics",
+                    "productId": "PROD-12345",
+                },
             )
             
             print(f"Image analysis started! Tracking ID: {response.analytics_id}")
@@ -280,18 +339,10 @@ When the file is available at a URL (such as in cloud storage or a public web lo
         option.WithAPIKey(os.Getenv("WORQHAT_API_KEY")),
       )
       
-      // Metadata to provide context for the workflow
-      metadata := map[string]interface{}{
-        "imageType": "product",
-        "category":  "electronics",
-        "productId": "PROD-12345",
-      }
-      
       // Trigger the workflow with a URL
       response, err := client.Flows.TriggerWithFile(context.Background(), worqhat.FlowsTriggerWithFileParams{
         WorkflowID: "image-analysis-workflow-id",
         URL:        "https://storage.example.com/products/laptop-x1.jpg",
-        Metadata:   metadata,
       })
       
       if err != nil {
@@ -312,10 +363,9 @@ If you need to trigger workflows with files directly from the command line or in
 ### Option 1: File Upload with cURL
 
 ```bash
-curl -X POST "https://api.worqhat.com/flows/file/your-workflow-id" \
+curl -X POST "https://api.worqhat.com/flows/file/e3f35867-77f4-4c49-b376-ac0f0cedb423" \
   -H "Authorization: Bearer YOUR_API_KEY" \
-  -F "file=@/path/to/your/file.pdf" \
-  -F "metadata={\"company\":\"Acme Corp\",\"priority\":\"high\"}" \
+  -F "file=@/path/to/local/file.png" \
   -F "input1=value1" \
   -F "input2=value2"
 ```
@@ -323,31 +373,29 @@ curl -X POST "https://api.worqhat.com/flows/file/your-workflow-id" \
 ### Option 2: URL Input with cURL
 
 ```bash
-curl -X POST "https://api.worqhat.com/flows/file/your-workflow-id" \
+curl -X POST "https://api.worqhat.com/flows/file/e3f35867-77f4-4c49-b376-ac0f0cedb423" \
   -H "Authorization: Bearer YOUR_API_KEY" \
-  -F "url=https://example.com/path/to/file.pdf" \
-  -F "metadata={\"company\":\"Acme Corp\",\"priority\":\"high\"}" \
+  -F "url=https://assets.worqhat.com/worqkitties/kitty-hi.png" \
   -F "input1=value1" \
   -F "input2=value2"
 ```
 
 ## Working with Responses
 
-When you trigger a workflow with a file, you'll receive an immediate response confirming that the workflow has started processing your file. The actual processing happens asynchronously.
+When you trigger a workflow with a file or URL, you'll receive an immediate response. Processing happens asynchronously.
 
 A typical response includes:
 
 ```json
 {
   "success": true,
-  "message": "Workflow triggered successfully with file upload",
-  "analytics_id": "1f9152dc-dec8-496f-8ba4-ed1c27a72684",
-  "timestamp": "2025-07-26T03:28:08.123Z",
+  "statusCode": "200",
   "data": {
-    "workflow_status": "started",
-    "file_received": true,
-    "additional_data": "from backend response"
-  }
+    "output": "In the picture, I see a cute cartoon cat wearing a Santa hat...",
+    "data1": "value1",
+    "data2": "value2"
+  },
+  "message": "Workflow triggered successfully with file upload"
 }
 ```
 
@@ -359,7 +407,6 @@ The API accepts `multipart/form-data` with the following fields:
 |-------|------|-------------|
 | `file` | File | The file to upload (required if not using URL) |
 | `url` | String | URL to a file to be downloaded and processed (required if not uploading a file) |
-| `metadata` | JSON String | Optional JSON metadata to provide context for the workflow |
 | `[custom parameters]` | String/Number/Boolean | Any additional parameters needed by your workflow |
 
 All form fields are forwarded to the workflow, allowing you to include any custom parameters your workflow needs to process the file correctly.
@@ -382,15 +429,11 @@ For complex workflows, you can include both file uploads (or URLs) and additiona
       try {
         const fileStream = fs.createReadStream('./contract.pdf');
         
-        // Add metadata and additional parameters
+        // Pass additional parameters directly in the payload
         const response = await client.flows.triggerWithFile(
           'document-processing-workflow-id',
           {
             file: fileStream,
-            metadata: {
-              documentType: "contract",
-              priority: "high"
-            },
             // Additional parameters
             customerId: "CID-12345",
             department: "legal",
@@ -422,17 +465,17 @@ For complex workflows, you can include both file uploads (or URLs) and additiona
             with open(file_path, 'rb') as file:
                 # Trigger the workflow with file and additional parameters
                 response = client.flows.trigger_with_file(
-                    workflow_id="document-processing-workflow-id",
-                    file=file,
-                    metadata={
+                    "document-processing-workflow-id",
+                    {
+                        "file": file,
+                        # Additional parameters
+                        "customerId": "CID-12345",
+                        "department": "legal",
+                        "requireSignature": True,
+                        "processingMode": "detailed",
                         "documentType": "contract",
-                        "priority": "high"
+                        "priority": "high",
                     },
-                    # Additional parameters
-                    customerId="CID-12345",
-                    department="legal",
-                    requireSignature=True,
-                    processingMode="detailed"
                 )
                 
                 print(f"Document processing started! Tracking ID: {response.analytics_id}")
@@ -659,13 +702,12 @@ Create a document processing system that extracts information from invoices:
 // Process an invoice PDF
 const response = await client.flows.triggerWithFile('invoice-processing-workflow-id', {
   file: invoiceFileBuffer,
-  metadata: {
-    company: "Acme Corp",
-    department: "Accounts Payable",
-    expectedTotal: 1250.00,
-    currency: "USD",
-    urgent: true
-  }
+  // Additional parameters go directly on the payload
+  company: "Acme Corp",
+  department: "Accounts Payable",
+  expectedTotal: 1250.00,
+  currency: "USD",
+  urgent: true
 });
 
 // Store the analytics_id to check processing status later
@@ -680,13 +722,12 @@ Build a media analysis pipeline that processes video content:
 // Process a video file from a URL
 const response = await client.flows.triggerWithFile('video-analysis-workflow-id', {
   url: 'https://storage.example.com/videos/product-demo-v2.mp4',
-  metadata: {
-    title: "Product Demo - Version 2",
-    duration: 187, // seconds
-    language: "en-US",
-    requireTranscription: true,
-    extractKeyMoments: true
-  }
+  // Additional parameters go directly on the payload
+  title: "Product Demo - Version 2",
+  duration: 187, // seconds
+  language: "en-US",
+  requireTranscription: true,
+  extractKeyMoments: true
 });
 ```
 
