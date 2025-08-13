@@ -19,6 +19,74 @@ Before you can make any API requests, you'll need to obtain an API key:
 Never share your API key publicly or commit it to version control systems. Use environment variables or secure key management solutions to store your API key.
 </Warning>
 
+### Install the SDKs
+
+Install the official WorqHat SDKs for your language of choice.
+
+<CodeGroup>
+```bash npm
+npm install worqhat
+```
+
+```bash yarn
+yarn add worqhat
+```
+
+```bash pnpm
+pnpm add worqhat
+```
+
+```bash bun
+bun add worqhat
+```
+
+```bash pip
+pip install worqhat
+```
+
+```bash pipenv
+pipenv install worqhat
+```
+
+```bash poetry
+poetry add worqhat
+```
+</CodeGroup>
+
+<Note>
+Node.js package: <a href="https://www.npmjs.com/package/worqhat" target="_blank" rel="noreferrer">worqhat on npm</a><br/>
+Python package: <a href="https://pypi.org/project/worqhat/" target="_blank" rel="noreferrer">worqhat on PyPI</a>
+</Note>
+
+### Hello, WorqHat (SDK Sanity Check)
+
+Quickly verify your installation by initializing the client and calling the health check.
+
+<CodeGroup>
+```javascript node.js
+import Worqhat from 'worqhat';
+
+const client = new Worqhat({
+  apiKey: process.env.WORQHAT_API_KEY,
+});
+
+(async () => {
+  const res = await client.health.check();
+  console.log('API Status:', res.status);
+})();
+```
+
+```python python
+import os
+from worqhat import Worqhat
+
+client = Worqhat(api_key=os.environ.get("WORQHAT_API_KEY", ""))
+
+res = client.health.check()
+print("API Status:", res.status)
+```
+</CodeGroup>
+
 ### Step 2: Make Your First API Request
 
 Let's make a simple request to check the API health status:
