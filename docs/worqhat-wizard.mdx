@@ -1,316 +1,220 @@
 ---
-title: "⚡ Quickstart Guide"
+title: "⌘ WorqHat Wizard"
 ---
 
-## Getting Started with WorqHat API
+{/* Banner */}
+<p align="center">
+  <img src="https://assets.worqhat.com/announcements/wizard-cli-header.png" alt="WorqHat Wizard banner" />
+</p>
 
-This quickstart guide will help you make your first API request to the WorqHat platform. Follow these simple steps to get up and running quickly.
 
-### Step 1: Get Your API Key
+# WorqHat Wizard
 
-Before you can make any API requests, you'll need to obtain an API key:
 
-1. Log in to your [WorqHat Dashboard](https://worqhat.app)
-2. Navigate to the API section
-3. Generate a new API key
-4. Copy your API key and store it securely
+A zero-setup CLI that scans your project, scaffolds WorqHat integration files, installs needed packages, writes usage docs, and optionally commits and opens a pull request for you.
 
-<Warning>
-Never share your API key publicly or commit it to version control systems. Use environment variables or secure key management solutions to store your API key.
-</Warning>
 
-### Install the SDKs
+> ⚠️ **Experimental:** This wizard is still in an experimental phase. If you have any feedback, please drop an email to sagnik [at] worqhat [dot] com.
 
-Install the official WorqHat SDKs for your language of choice.
 
-<CodeGroup>
-```bash npm
-npm install worqhat
+WorqHat wizard ✨
+The WorqHat wizard helps you quickly add WorqHat to your project using AI.
+
+
+Works with JavaScript/TypeScript, plus guidance for Python and Ruby projects.
+
+
+---
+
+
+## Features
+
+
+* **Project scan**: Detects languages and generates a project tree snapshot.
+* **Guided setup**: Choose to scaffold Workflows and/or Database helpers.
+* **Smart scaffolding**: Creates `worqhat/config.*`, `worqhat/workflows.*`, and `worqhat/db.*` (when applicable).
+* **Docs generation**: Appends clear usage docs to `WORQHAT.md` per generated file.
+* **Package install**: Installs language-appropriate dependencies.
+* **Git automation**: Creates a dedicated branch, commits, pushes, and opens a PR via GitHub CLI (if available).
+
+
+---
+
+
+## Requirements
+
+
+* Node.js >= 18
+* Git installed and a Git repository (for branch/commit/PR automation)
+* Optional: GitHub CLI (`gh`) for automatic PR creation
+
+
+---
+
+
+## Installation
+
+
+Global install (recommended):
+
+
+```bash
+npm i -g @worqhat/wizard
 ```
 
-```bash yarn
-yarn add worqhat
+
+Then run from any repository root:
+
+
+```bash
+worqhat-wizard
 ```
 
-```bash pnpm
-pnpm add worqhat
+
+Or use npx without global install:
+
+
+```bash
+npx @worqhat/wizard
 ```
 
-```bash bun
-bun add worqhat
+
+In a monorepo, run the wizard at the package root you want to scaffold.
+
+
+---
+
+
+## Quick Start
+
+
+1. In your Git repo, run `worqhat-wizard`.
+2. Follow the prompts to pick WorqHat components (Workflows, Database).
+3. When asked, provide your WorqHat API key.
+4. Review newly created files and the `WORQHAT.md` guide.
+5. The wizard will commit your changes on a dedicated branch and push a PR (if `gh` is available).
+
+
+---
+
+
+## What it generates
+
+
+Depending on your choices and detected language, the wizard generates:
+
+
+* `WORQHAT.md`: A living guide with project snapshot and usage docs.
+* `worqhat/config.*`: WorqHat client config and environment setup guidance.
+* `worqhat/workflows.*`: Starter workflow helpers (examples avoid importing/passing the client explicitly).
+* `worqhat/db.*`: Optional database helpers when you select Database.
+
+
+It will also append documentation sections (Overview, API, Examples) to `WORQHAT.md` for the generated files.
+
+
+---
+
+
+## CLI usage and options
+
+
+| Option                   | Type    | Default        | Description                                                                                              |
+|--------------------------|---------|----------------|----------------------------------------------------------------------------------------------------------|
+| --help                   | boolean | —              | Show help                                                                                                |
+| --version                | boolean | —              | Show version number                                                                                      |
+| --force-install          | boolean | false          | Force install packages even if peer dependency checks fail                                               |
+| --logout                 | boolean | —              | Remove saved API key                                                                                     |
+| --branch-prefix (prefix) | string  | worqhat-wizard | Prefix for the new git branch created by the wizard (format: --branch-prefix &lt;prefix&gt; or --branch-prefix=&lt;prefix&gt;) |
+
+
+Examples:
+
+
+```bash
+# Show version and help
+worqhat-wizard --version
+worqhat-wizard --help
+
+
+# Create a branch using a custom prefix
+worqhat-wizard --branch-prefix my-init
+
+
+# Force dependency installation if peer checks fail
+worqhat-wizard --force-install
+
+
+# Remove stored API key and exit
+worqhat-wizard --logout
 ```
 
-```bash pip
-pip install worqhat
+
+---
+
+
+## Branching, commits, and PRs
+
+
+The wizard prepares work on a dedicated branch before making changes:
+
+
+* Creates and checks out a branch named `<prefix>/<YYYY-MM-DD-HHMMSS>` (default prefix: `worqhat-wizard`).
+* Stages and commits all changes with a descriptive message.
+* Pushes the branch to `origin`.
+* If the GitHub CLI (`gh`) is available, opens a pull request and prints a confirmation.
+
+
+If a Git repository is not detected, the wizard skips these steps and informs you.
+
+
+---
+
+
+## Configuration and secrets
+
+
+* On first run, the wizard prompts for your WorqHat API key.
+* `WORQHAT.md` includes an Environment Setup section explaining how to set `WORQHAT_API_KEY` via shell or `.env`.
+* Never commit secrets to version control. Treat `.env` files with care and add them to `.gitignore`.
+
+
+
+## Troubleshooting
+
+
+* __No Git repo detected__: Initialize Git first (`git init`) or run in an existing repo. The wizard can still generate files without Git.
+* __Cannot push or create PR__: Ensure `origin` is set and you have permissions. Install `gh` to enable automatic PR creation.
+* __Package installation issues__: Use `--force-install` to bypass strict peer checks, or install dependencies manually as prompted.
+* __Missing API key__: Re-run the wizard and supply the key, or set `WORQHAT_API_KEY` in your shell/.env. Use `--logout` to remove the stored key.
+
+
+---
+
+
+## Uninstall
+
+
+Global uninstall:
+
+
+```bash
+npm uninstall -g @worqhat/wizard
 ```
 
-```bash pipenv
-pipenv install worqhat
+
+Remove stored API key if desired:
+
+
+```bash
+worqhat-wizard --logout
 ```
 
-```bash poetry
-poetry add worqhat
-```
-</CodeGroup>
 
-<Note>
-Node.js package: <a href="https://www.npmjs.com/package/worqhat" target="_blank" rel="noreferrer">worqhat on npm</a><br/>
-Python package: <a href="https://pypi.org/project/worqhat/" target="_blank" rel="noreferrer">worqhat on PyPI</a>
-</Note>
+---
 
-### Hello, WorqHat (SDK Sanity Check)
 
-Quickly verify your installation by initializing the client and calling the health check.
+## License
 
-<CodeGroup>
-```javascript node.js
-import Worqhat from 'worqhat';
 
-const client = new Worqhat({
-  apiKey: process.env.WORQHAT_API_KEY,
-});
-
-(async () => {
-  const res = await client.health.check();
-  console.log('API Status:', res.status);
-})();
-```
-
-```python python
-import os
-from worqhat import Worqhat
-
-client = Worqhat(api_key=os.environ.get("WORQHAT_API_KEY", ""))
-
-res = client.health.check()
-print("API Status:", res.status)
-```
-</CodeGroup>
-
-### Step 2: Make Your First API Request
-
-Let's make a simple request to check the API health status:
-
-<CodeGroup>
-```bash curl
-curl -X GET "https://api.worqhat.com/health" \
-  -H "Authorization: Bearer YOUR_API_KEY"
-```
-
-```javascript fetch.js
-fetch('https://api.worqhat.com/health', {
-  headers: {
-    'Authorization': 'Bearer YOUR_API_KEY'
-  }
-})
-.then(response => response.json())
-.then(data => console.log(data));
-```
-
-```python requests.py
-import requests
-
-headers = {
-    "Authorization": "Bearer YOUR_API_KEY"
-}
-
-response = requests.get("https://api.worqhat.com/health", headers=headers)
-print(response.json())
-```
-</CodeGroup>
-
-You should receive a response similar to:
-
-```json
-{
-  "status": "ok",
-  "uptime": 123.45,
-  "version": "1.0.0",
-  "environment": "production",
-  "timestamp": "2025-07-24T17:00:00Z",
-  "services": {
-    "database": "ok"
-  }
-}
-```
-
-### Step 3: Explore the API
-
-Now that you've made your first request, you can explore the different endpoints available:
-
-<CardGroup cols={2}>
-  <Card title="Database Operations" href="#database-operations">
-    Query, insert, update, and delete data using the database endpoints.
-  </Card>
-  <Card title="Workflow Management" href="#workflow-management">
-    Create and manage workflows for your organization.
-  </Card>
-  <Card title="System Information" href="#system-information">
-    Get information about the API server and its health status.
-  </Card>
-  <Card title="User Management" href="#user-management">
-    Manage users and their permissions.
-  </Card>
-</CardGroup>
-
-## Code Examples
-
-### Checking API Health
-
-<CodeGroup dropdown>
-```javascript node.js
-import Worqhat from 'worqhat';
-
-const client = new Worqhat({
-  apiKey: process.env.WORQHAT_API_KEY,
-});
-
-async function checkApiHealth() {
-  try {
-    const response = await client.health.check();
-    console.log(`API Status: ${response.status}`);
-    return response;
-  } catch (error) {
-    console.error('Error checking API health:', error);
-  }
-}
-
-checkApiHealth();
-```
-
-```python python
-from worqhat import Worqhat
-
-# Initialize the client
-client = Worqhat(
-    api_key="YOUR_API_KEY",  # Better to use environment variables
-)
-
-# Check API health
-response = client.health.check()
-print(f"API Status: {response.status}")
-```
-
-```go golang
-package main
-
-import (
-  "context"
-  "fmt"
-
-  "github.com/WorqHat/worqhat-go-sdk"
-  "github.com/WorqHat/worqhat-go-sdk/option"
-)
-
-func main() {
-  client := worqhat.NewClient(
-    option.WithAPIKey("YOUR_API_KEY"),  // Better to use environment variables
-  )
-  
-  response, err := client.Health.Check(context.TODO())
-  if err != nil {
-    panic(err.Error())
-  }
-  
-  fmt.Printf("API Status: %s\n", response.Status)
-}
-```
-
-```java java
-import com.worqhat.api.client.WorqhatClient;
-import com.worqhat.api.client.okhttp.WorqhatOkHttpClient;
-import com.worqhat.api.models.health.HealthCheckResponse;
-
-public class HealthCheck {
-    public static void main(String[] args) {
-        WorqhatClient client = WorqhatOkHttpClient.builder()
-            .apiKey(System.getenv("WORQHAT_API_KEY"))
-            .build();
-            
-        HealthCheckResponse response = client.health().check();
-        System.out.println("API Status: " + response.getStatus());
-    }
-}
-```
-</CodeGroup>
-
-### Database Operations
-
-<CodeGroup dropdown>
-```javascript node.js
-import Worqhat from 'worqhat';
-
-const client = new Worqhat({
-  apiKey: process.env.WORQHAT_API_KEY,
-});
-
-async function queryDatabase() {
-  try {
-    const response = await client.db.executeQuery({
-      query: "SELECT * FROM users WHERE status = 'active' LIMIT 10",
-    });
-    console.log(response.data);
-    return response;
-  } catch (error) {
-    console.error('Error querying database:', error);
-  }
-}
-
-queryDatabase();
-```
-
-```python python
-from worqhat import Worqhat
-
-# Initialize the client
-client = Worqhat(
-    api_key="YOUR_API_KEY",  # Better to use environment variables
-)
-
-# Query the database
-response = client.db.execute_query(
-    query="SELECT * FROM users WHERE status = 'active' LIMIT 10",
-)
-print(response.data)
-```
-
-```go golang
-package main
-
-import (
-  "context"
-  "fmt"
-
-  "github.com/WorqHat/worqhat-go-sdk"
-  "github.com/WorqHat/worqhat-go-sdk/option"
-)
-
-func main() {
-  client := worqhat.NewClient(
-    option.WithAPIKey("YOUR_API_KEY"),  // Better to use environment variables
-  )
-  
-  response, err := client.DB.ExecuteQuery(context.TODO(), worqhat.DBExecuteQueryParams{
-    Query: "SELECT * FROM users WHERE status = 'active' LIMIT 10",
-  })
-  if err != nil {
-    panic(err.Error())
-  }
-  
-  fmt.Printf("%+v\n", response.Data)
-}
-```
-</CodeGroup>
-
-## Next Steps
-
-Now that you've made your first API request, you can:
-
-1. Explore the [API Reference](/api-reference) for detailed endpoint documentation
-2. Learn about [Authentication](/authentication) mechanisms
-3. Check out our [Code Examples](/code-examples) for common use cases
-4. Join our [Developer Community](https://discord.com/invite/KHh9mguKBx) for support
-
-<Card title="Need Help?" icon="question" href="https://worqhat.com/contact-us">
-  Contact our support team if you encounter any issues or have questions about the API.
-</Card>
+MIT
