@@ -66,7 +66,7 @@
         "groups": [
           {
             "group": "Introduction",
-            "pages": ["docs/get-started", "docs/quickstart", "docs/rate-limit"]
+            "pages": ["docs/get-started", "docs/quickstart", "docs/worqhat-wizard", "docs/rate-limit"]
           },
           {
             "group": "System",
