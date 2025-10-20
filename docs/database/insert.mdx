@@ -45,6 +45,7 @@ This example shows how to insert a record with an auto-generated documentId.
     // Initialize the client with your API key
     const client = new Worqhat({
       apiKey: process.env.WORQHAT_API_KEY, // Always use environment variables for API keys
+      environment: process.env.WORQHAT_ENVIRONMENT || 'production', // Defaults to production
     });
     
     async function createUser() {
@@ -83,6 +84,7 @@ This example shows how to insert a record with an auto-generated documentId.
     # Initialize the client with your API key
     client = Worqhat(
         api_key=os.environ.get("WORQHAT_API_KEY"),  # Using environment variables for security
+        environment=os.environ.get("WORQHAT_ENVIRONMENT", "production"),  # Defaults to production
     )
     
     # Insert a new record
@@ -123,6 +125,7 @@ This example shows how to insert a record with an auto-generated documentId.
       // Initialize the client with your API key
       client := worqhat.NewClient(
         option.WithAPIKey(os.Getenv("WORQHAT_API_KEY")),  // Using environment variables
+        option.WithEnvironment(os.Getenv("WORQHAT_ENVIRONMENT", "production")),  // Defaults to production
       )
       
       // Insert a new record
@@ -162,7 +165,8 @@ This example shows how to insert a record with an auto-generated documentId.
           "email": "john@example.com",
           "role": "user",
           "active": true
-        }
+        },
+        "environment": "production"
       }'
     ```
   </Tab>
@@ -180,6 +184,7 @@ This example shows how to insert a record with a custom documentId that you spec
     // Initialize the client with your API key
     const client = new Worqhat({
       apiKey: process.env.WORQHAT_API_KEY,
+      environment: process.env.WORQHAT_ENVIRONMENT || 'production', // Defaults to production
     });
     
     async function createProductWithCustomId() {
@@ -220,6 +225,7 @@ This example shows how to insert a record with a custom documentId that you spec
     # Initialize the client with your API key
     client = Worqhat(
         api_key=os.environ.get("WORQHAT_API_KEY"),
+        environment=os.environ.get("WORQHAT_ENVIRONMENT", "production"),  # Defaults to production
     )
     
     # Generate a custom ID
@@ -265,6 +271,7 @@ This example shows how to insert a record with a custom documentId that you spec
       // Initialize the client with your API key
       client := worqhat.NewClient(
         option.WithAPIKey(os.Getenv("WORQHAT_API_KEY")),
+        option.WithEnvironment(os.Getenv("WORQHAT_ENVIRONMENT", "production")),  // Defaults to production
       )
       
       // Generate a custom ID
@@ -309,7 +316,8 @@ This example shows how to insert a record with a custom documentId that you spec
           "price": 99.99,
           "inStock": true,
           "category": "electronics"
-        }
+        },
+        "environment": "production"
       }'
     ```
   </Tab>
@@ -327,6 +335,7 @@ This example shows how to insert multiple records at once by providing an array 
     // Initialize the client with your API key
     const client = new Worqhat({
       apiKey: process.env.WORQHAT_API_KEY,
+      environment: process.env.WORQHAT_ENVIRONMENT || 'production', // Defaults to production
     });
     
     async function createMultipleProducts() {
@@ -377,6 +386,7 @@ This example shows how to insert multiple records at once by providing an array 
     # Initialize the client with your API key
     client = Worqhat(
         api_key=os.environ.get("WORQHAT_API_KEY"),
+        environment=os.environ.get("WORQHAT_ENVIRONMENT", "production"),  # Defaults to production
     )
     
     # Insert multiple records at once
@@ -430,6 +440,7 @@ This example shows how to insert multiple records at once by providing an array 
       // Initialize the client with your API key
       client := worqhat.NewClient(
         option.WithAPIKey(os.Getenv("WORQHAT_API_KEY")),
+        option.WithEnvironment(os.Getenv("WORQHAT_ENVIRONMENT", "production")),  // Defaults to production
       )
       
       // Create array of product data
@@ -500,7 +511,8 @@ This example shows how to insert multiple records at once by providing an array 
             "inStock": false,
             "category": "premium"
           }
-        ]
+        ],
+        "environment": "production"
       }'
     ```
   </Tab>

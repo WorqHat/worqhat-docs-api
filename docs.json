@@ -91,6 +91,15 @@
             ]
           },
           {
+            "group": "Storage",
+            "pages": [
+              "docs/storage/upload",
+              "docs/storage/fetch-by-id",
+              "docs/storage/fetch-by-path",
+              "docs/storage/delete"
+            ]
+          },
+          {
             "group": "Policies",
             "pages": [
               "docs/policies/terms-of-services",
@@ -128,6 +137,15 @@
               "api-reference/workflows/get-workflow-metrics",
               "api-reference/workflows/trigger-workflow-json-reference",
               "api-reference/workflows/trigger-workflow-file-reference"
+            ]
+          },
+          {
+            "group": "Storage",
+            "pages": [
+              "api-reference/storage/upload-file",
+              "api-reference/storage/fetch-file-by-id",
+              "api-reference/storage/fetch-file-by-path",
+              "api-reference/storage/delete-file"
             ]
           }
         ]

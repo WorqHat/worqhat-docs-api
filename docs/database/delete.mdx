@@ -53,7 +53,8 @@ This example shows how to delete records that match a single condition.
           table: 'users',          // The table to delete from
           where: {                 // The condition to match records
             status: 'inactive'
-          }
+          },
+          environment: process.env.WORQHAT_ENVIRONMENT || 'production' // Defaults to production
         });
         
         // Handle the successful response
@@ -87,7 +88,8 @@ This example shows how to delete records that match a single condition.
             table="users",          # The table to delete from
             where={                 # The condition to match records
                 "status": "inactive"
-            }
+            },
+            environment=os.environ.get("WORQHAT_ENVIRONMENT", "production")  # Defaults to production
         )
         
         # Handle the successful response
@@ -124,6 +126,7 @@ This example shows how to delete records that match a single condition.
         Where: map[string]interface{}{ // The condition to match records
           "status": "inactive",
         },
+        Environment: os.Getenv("WORQHAT_ENVIRONMENT", "production"), // Defaults to production
       })
       
       // Handle errors
@@ -149,7 +152,8 @@ This example shows how to delete records that match a single condition.
         "table": "users",
         "where": {
           "status": "inactive"
-        }
+        },
+        "environment": "production"
       }'
     ```
   </Tab>
@@ -181,7 +185,8 @@ This example shows how to delete records that match multiple conditions.
           where: {                // Multiple conditions to match records
             status: 'completed',
             priority: 'low'
-          }
+          },
+          environment: process.env.WORQHAT_ENVIRONMENT || 'production' // Defaults to production
         });
         
         // Handle the successful response
@@ -205,6 +210,7 @@ This example shows how to delete records that match multiple conditions.
     # Initialize the client with your API key
     client = Worqhat(
         api_key=os.environ.get("WORQHAT_API_KEY"),
+        environment=os.environ.get("WORQHAT_ENVIRONMENT", "production"),  # Defaults to production
     )
     
     # Get date from 30 days ago
@@ -246,6 +252,7 @@ This example shows how to delete records that match multiple conditions.
       // Initialize the client with your API key
       client := worqhat.NewClient(
         option.WithAPIKey(os.Getenv("WORQHAT_API_KEY")),
+        option.WithEnvironment(os.Getenv("WORQHAT_ENVIRONMENT", "production")),  // Defaults to production
       )
       
       // Get date from 30 days ago
@@ -284,7 +291,8 @@ This example shows how to delete records that match multiple conditions.
         "where": {
           "status": "completed",
           "priority": "low"
-        }
+        },
+        "environment": "production"
       }'
     ```
   </Tab>

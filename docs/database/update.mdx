@@ -44,6 +44,7 @@ This example shows how to update records that match multiple conditions (both ID
     // Initialize the client with your API key
     const client = new Worqhat({
       apiKey: process.env.WORQHAT_API_KEY, // Always use environment variables for API keys
+      environment: process.env.WORQHAT_ENVIRONMENT || 'production', // Defaults to production
     });
     
     async function updateUserStatus() {
@@ -84,6 +85,7 @@ This example shows how to update records that match multiple conditions (both ID
     # Initialize the client with your API key
     client = Worqhat(
         api_key=os.environ.get("WORQHAT_API_KEY"),  # Using environment variables for security
+        environment=os.environ.get("WORQHAT_ENVIRONMENT", "production"),  # Defaults to production
     )
     
     # Update records in the database
@@ -126,6 +128,7 @@ This example shows how to update records that match multiple conditions (both ID
       // Initialize the client with your API key
       client := worqhat.NewClient(
         option.WithAPIKey(os.Getenv("WORQHAT_API_KEY")),  // Using environment variables
+        option.WithEnvironment(os.Getenv("WORQHAT_ENVIRONMENT", "production")),  // Defaults to production
       )
       
       // Update records in the database
@@ -169,7 +172,8 @@ This example shows how to update records that match multiple conditions (both ID
         "data": {
           "status": "active",
           "name": "Updated Name"
-        }
+        },
+        "environment": "production"
       }'
     ```
   </Tab>
@@ -187,6 +191,7 @@ This example shows how to update all records that match a single condition (stat
     // Initialize the client with your API key
     const client = new Worqhat({
       apiKey: process.env.WORQHAT_API_KEY,
+      environment: process.env.WORQHAT_ENVIRONMENT || 'production', // Defaults to production
     });
     
     async function updateInactiveUsers() {
@@ -223,6 +228,7 @@ This example shows how to update all records that match a single condition (stat
     # Initialize the client with your API key
     client = Worqhat(
         api_key=os.environ.get("WORQHAT_API_KEY"),
+        environment=os.environ.get("WORQHAT_ENVIRONMENT", "production"),  # Defaults to production
     )
     
     # Update all inactive users to active
@@ -263,6 +269,7 @@ This example shows how to update all records that match a single condition (stat
       // Initialize the client with your API key
       client := worqhat.NewClient(
         option.WithAPIKey(os.Getenv("WORQHAT_API_KEY")),
+        option.WithEnvironment(os.Getenv("WORQHAT_ENVIRONMENT", "production")),  // Defaults to production
       )
       
       // Update all inactive users to active
@@ -303,7 +310,8 @@ This example shows how to update all records that match a single condition (stat
         "data": {
           "status": "active",
           "updatedBy": "system"
-        }
+        },
+        "environment": "production"
       }'
     ```
   </Tab>
