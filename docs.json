@@ -129,6 +129,15 @@
               "api-reference/workflows/trigger-workflow-json-reference",
               "api-reference/workflows/trigger-workflow-file-reference"
             ]
+          },
+          {
+            "group": "Storage",
+            "pages": [
+              "api-reference/storage/upload-file",
+              "api-reference/storage/fetch-file-by-id",
+              "api-reference/storage/fetch-file-by-path",
+              "api-reference/storage/delete-file"
+            ]
           }
         ]
       }
