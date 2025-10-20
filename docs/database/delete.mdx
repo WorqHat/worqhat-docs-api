@@ -44,7 +44,6 @@ This example shows how to delete records that match a single condition.
     // Initialize the client with your API key
     const client = new Worqhat({
       apiKey: process.env.WORQHAT_API_KEY, // Always use environment variables for API keys
-      environment: process.env.WORQHAT_ENVIRONMENT || 'production', // Defaults to production
     });
     
     async function deleteInactiveUsers() {
@@ -54,7 +53,8 @@ This example shows how to delete records that match a single condition.
           table: 'users',          // The table to delete from
           where: {                 // The condition to match records
             status: 'inactive'
-          }
+          },
+          environment: process.env.WORQHAT_ENVIRONMENT || 'production' // Defaults to production
         });
         
         // Handle the successful response
@@ -80,7 +80,6 @@ This example shows how to delete records that match a single condition.
     # Initialize the client with your API key
     client = Worqhat(
         api_key=os.environ.get("WORQHAT_API_KEY"),  # Using environment variables for security
-        environment=os.environ.get("WORQHAT_ENVIRONMENT", "production"),  # Defaults to production
     )
     
     # Delete inactive users
@@ -89,7 +88,8 @@ This example shows how to delete records that match a single condition.
             table="users",          # The table to delete from
             where={                 # The condition to match records
                 "status": "inactive"
-            }
+            },
+            environment=os.environ.get("WORQHAT_ENVIRONMENT", "production")  # Defaults to production
         )
         
         # Handle the successful response
@@ -118,7 +118,6 @@ This example shows how to delete records that match a single condition.
       // Initialize the client with your API key
       client := worqhat.NewClient(
         option.WithAPIKey(os.Getenv("WORQHAT_API_KEY")),  // Using environment variables
-        option.WithEnvironment(os.Getenv("WORQHAT_ENVIRONMENT", "production")),  // Defaults to production
       )
       
       // Delete inactive users
@@ -127,6 +126,7 @@ This example shows how to delete records that match a single condition.
         Where: map[string]interface{}{ // The condition to match records
           "status": "inactive",
         },
+        Environment: os.Getenv("WORQHAT_ENVIRONMENT", "production"), // Defaults to production
       })
       
       // Handle errors
@@ -148,12 +148,12 @@ This example shows how to delete records that match a single condition.
     curl -X DELETE "https://api.worqhat.com/db/delete" \
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer YOUR_API_KEY" \
-      -H "X-Environment: production" \
       -d '{
         "table": "users",
         "where": {
           "status": "inactive"
-        }
+        },
+        "environment": "production"
       }'
     ```
   </Tab>
@@ -171,7 +171,6 @@ This example shows how to delete records that match multiple conditions.
     // Initialize the client with your API key
     const client = new Worqhat({
       apiKey: process.env.WORQHAT_API_KEY,
-      environment: process.env.WORQHAT_ENVIRONMENT || 'production', // Defaults to production
     });
     
     async function deleteOldCompletedTasks() {
@@ -186,7 +185,8 @@ This example shows how to delete records that match multiple conditions.
           where: {                // Multiple conditions to match records
             status: 'completed',
             priority: 'low'
-          }
+          },
+          environment: process.env.WORQHAT_ENVIRONMENT || 'production' // Defaults to production
         });
         
         // Handle the successful response
@@ -286,13 +286,13 @@ This example shows how to delete records that match multiple conditions.
     curl -X DELETE "https://api.worqhat.com/db/delete" \
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer YOUR_API_KEY" \
-      -H "X-Environment: production" \
       -d '{
         "table": "tasks",
         "where": {
           "status": "completed",
           "priority": "low"
-        }
+        },
+        "environment": "production"
       }'
     ```
   </Tab>

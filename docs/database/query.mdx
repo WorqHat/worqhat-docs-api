@@ -142,9 +142,9 @@ This example shows how to execute a simple SQL query to retrieve active users.
     curl -X POST "https://api.worqhat.com/db/query" \
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer YOUR_API_KEY" \
-      -H "X-Environment: production" \
       -d '{
-        "query": "SELECT * FROM users WHERE status = \'active\' LIMIT 10"
+        "query": "SELECT * FROM users WHERE status = \'active\' LIMIT 10",
+        "environment": "production"
       }'
     ```
   </Tab>
@@ -289,9 +289,9 @@ This example shows how to execute a more complex SQL query with aggregations.
     curl -X POST "https://api.worqhat.com/db/query" \
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer YOUR_API_KEY" \
-      -H "X-Environment: production" \
       -d '{
-        "query": "SELECT category, COUNT(*) as order_count, SUM(quantity) as total_items, SUM(price * quantity) as total_revenue FROM orders WHERE order_date >= \'2025-01-01\' GROUP BY category ORDER BY total_revenue DESC"
+        "query": "SELECT category, COUNT(*) as order_count, SUM(quantity) as total_items, SUM(price * quantity) as total_revenue FROM orders WHERE order_date >= \'2025-01-01\' GROUP BY category ORDER BY total_revenue DESC",
+        "environment": "production"
       }'
     ```
   </Tab>

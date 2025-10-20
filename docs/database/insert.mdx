@@ -158,7 +158,6 @@ This example shows how to insert a record with an auto-generated documentId.
     curl -X POST "https://api.worqhat.com/db/insert" \
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer YOUR_API_KEY" \
-      -H "X-Environment: production" \
       -d '{
         "table": "users",
         "data": {
@@ -166,7 +165,8 @@ This example shows how to insert a record with an auto-generated documentId.
           "email": "john@example.com",
           "role": "user",
           "active": true
-        }
+        },
+        "environment": "production"
       }'
     ```
   </Tab>
@@ -308,7 +308,6 @@ This example shows how to insert a record with a custom documentId that you spec
     curl -X POST "https://api.worqhat.com/db/insert" \
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer YOUR_API_KEY" \
-      -H "X-Environment: production" \
       -d '{
         "table": "products",
         "data": {
@@ -317,7 +316,8 @@ This example shows how to insert a record with a custom documentId that you spec
           "price": 99.99,
           "inStock": true,
           "category": "electronics"
-        }
+        },
+        "environment": "production"
       }'
     ```
   </Tab>
@@ -490,7 +490,6 @@ This example shows how to insert multiple records at once by providing an array 
     curl -X POST "https://api.worqhat.com/db/insert" \
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer YOUR_API_KEY" \
-      -H "X-Environment: production" \
       -d '{
         "table": "products",
         "data": [
@@ -512,7 +511,8 @@ This example shows how to insert multiple records at once by providing an array 
             "inStock": false,
             "category": "premium"
           }
-        ]
+        ],
+        "environment": "production"
       }'
     ```
   </Tab>

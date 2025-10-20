@@ -174,10 +174,10 @@ This example shows how to execute a simple natural language query to retrieve ac
     curl -X POST "https://api.worqhat.com/db/nl-query" \
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer YOUR_API_KEY" \
-      -H "X-Environment: production" \
       -d '{
         "question": "How many active users do we have?",
-        "table": "users"
+        "table": "users",
+        "environment": "production"
       }'
     ```
 
@@ -294,10 +294,10 @@ This example shows how to execute a more complex natural language query to analy
     curl -X POST "https://api.worqhat.com/db/nl-query" \
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer YOUR_API_KEY" \
-      -H "X-Environment: production" \
       -d '{
         "question": "What were the top 3 product categories by revenue last quarter?",
-        "table": "sales"
+        "table": "sales",
+        "environment": "production"
       }'
     ```
   </Tab>

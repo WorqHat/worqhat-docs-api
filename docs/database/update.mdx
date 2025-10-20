@@ -163,7 +163,6 @@ This example shows how to update records that match multiple conditions (both ID
     curl -X PUT "https://api.worqhat.com/db/update" \
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer YOUR_API_KEY" \
-      -H "X-Environment: production" \
       -d '{
         "table": "users",
         "where": {
@@ -173,7 +172,8 @@ This example shows how to update records that match multiple conditions (both ID
         "data": {
           "status": "active",
           "name": "Updated Name"
-        }
+        },
+        "environment": "production"
       }'
     ```
   </Tab>
@@ -302,7 +302,6 @@ This example shows how to update all records that match a single condition (stat
     curl -X PUT "https://api.worqhat.com/db/update" \
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer YOUR_API_KEY" \
-      -H "X-Environment: production" \
       -d '{
         "table": "users",
         "where": {
@@ -311,7 +310,8 @@ This example shows how to update all records that match a single condition (stat
         "data": {
           "status": "active",
           "updatedBy": "system"
-        }
+        },
+        "environment": "production"
       }'
     ```
   </Tab>

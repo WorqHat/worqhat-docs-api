@@ -91,6 +91,15 @@
             ]
           },
           {
+            "group": "Storage",
+            "pages": [
+              "docs/storage/upload",
+              "docs/storage/fetch-by-id",
+              "docs/storage/fetch-by-path",
+              "docs/storage/delete"
+            ]
+          },
+          {
             "group": "Policies",
             "pages": [
               "docs/policies/terms-of-services",
