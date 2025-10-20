@@ -73,6 +73,7 @@ This example shows how to execute a simple natural language query to retrieve ac
     // Initialize the client with your API key
     const client = new Worqhat({
       apiKey: process.env.WORQHAT_API_KEY, // Always use environment variables for API keys
+      environment: process.env.WORQHAT_ENVIRONMENT || 'production', // Defaults to production
     });
     
     async function countActiveUsers() {
@@ -107,6 +108,7 @@ This example shows how to execute a simple natural language query to retrieve ac
     # Initialize the client with your API key
     client = Worqhat(
         api_key=os.environ.get("WORQHAT_API_KEY"),  # Using environment variables for security
+        environment=os.environ.get("WORQHAT_ENVIRONMENT", "production"),  # Defaults to production
     )
     
     # Execute natural language query
@@ -143,6 +145,7 @@ This example shows how to execute a simple natural language query to retrieve ac
       // Initialize the client with your API key
       client := worqhat.NewClient(
         option.WithAPIKey(os.Getenv("WORQHAT_API_KEY")),  // Using environment variables
+        option.WithEnvironment(os.Getenv("WORQHAT_ENVIRONMENT", "production")),  // Defaults to production
       )
       
       // Execute natural language query
@@ -171,6 +174,7 @@ This example shows how to execute a simple natural language query to retrieve ac
     curl -X POST "https://api.worqhat.com/db/nl-query" \
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer YOUR_API_KEY" \
+      -H "X-Environment: production" \
       -d '{
         "question": "How many active users do we have?",
         "table": "users"
@@ -193,6 +197,7 @@ This example shows how to execute a more complex natural language query to analy
     // Initialize the client with your API key
     const client = new Worqhat({
       apiKey: process.env.WORQHAT_API_KEY,
+      environment: process.env.WORQHAT_ENVIRONMENT || 'production', // Defaults to production
     });
     
     async function analyzeSalesData() {
@@ -224,6 +229,7 @@ This example shows how to execute a more complex natural language query to analy
     # Initialize the client with your API key
     client = Worqhat(
         api_key=os.environ.get("WORQHAT_API_KEY"),
+        environment=os.environ.get("WORQHAT_ENVIRONMENT", "production"),  # Defaults to production
     )
     
     # Execute more complex natural language query
@@ -259,6 +265,7 @@ This example shows how to execute a more complex natural language query to analy
       // Initialize the client with your API key
       client := worqhat.NewClient(
         option.WithAPIKey(os.Getenv("WORQHAT_API_KEY")),
+        option.WithEnvironment(os.Getenv("WORQHAT_ENVIRONMENT", "production")),  // Defaults to production
       )
       
       // Execute more complex natural language query
@@ -287,6 +294,7 @@ This example shows how to execute a more complex natural language query to analy
     curl -X POST "https://api.worqhat.com/db/nl-query" \
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer YOUR_API_KEY" \
+      -H "X-Environment: production" \
       -d '{
         "question": "What were the top 3 product categories by revenue last quarter?",
         "table": "sales"

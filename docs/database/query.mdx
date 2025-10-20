@@ -44,6 +44,7 @@ This example shows how to execute a simple SQL query to retrieve active users.
     // Initialize the client with your API key
     const client = new Worqhat({
       apiKey: process.env.WORQHAT_API_KEY, // Always use environment variables for API keys
+      environment: process.env.WORQHAT_ENVIRONMENT || 'production', // Defaults to production
     });
     
     async function fetchActiveUsers() {
@@ -77,6 +78,7 @@ This example shows how to execute a simple SQL query to retrieve active users.
     # Initialize the client with your API key
     client = Worqhat(
         api_key=os.environ.get("WORQHAT_API_KEY"),  # Using environment variables for security
+        environment=os.environ.get("WORQHAT_ENVIRONMENT", "production"),  # Defaults to production
     )
     
     # Execute SQL query
@@ -112,6 +114,7 @@ This example shows how to execute a simple SQL query to retrieve active users.
       // Initialize the client with your API key
       client := worqhat.NewClient(
         option.WithAPIKey(os.Getenv("WORQHAT_API_KEY")),  // Using environment variables
+        option.WithEnvironment(os.Getenv("WORQHAT_ENVIRONMENT", "production")),  // Defaults to production
       )
       
       // Execute SQL query
@@ -139,6 +142,7 @@ This example shows how to execute a simple SQL query to retrieve active users.
     curl -X POST "https://api.worqhat.com/db/query" \
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer YOUR_API_KEY" \
+      -H "X-Environment: production" \
       -d '{
         "query": "SELECT * FROM users WHERE status = \'active\' LIMIT 10"
       }'
@@ -158,6 +162,7 @@ This example shows how to execute a more complex SQL query with aggregations.
     // Initialize the client with your API key
     const client = new Worqhat({
       apiKey: process.env.WORQHAT_API_KEY,
+      environment: process.env.WORQHAT_ENVIRONMENT || 'production', // Defaults to production
     });
     
     async function generateSalesReport() {
@@ -199,6 +204,7 @@ This example shows how to execute a more complex SQL query with aggregations.
     # Initialize the client with your API key
     client = Worqhat(
         api_key=os.environ.get("WORQHAT_API_KEY"),
+        environment=os.environ.get("WORQHAT_ENVIRONMENT", "production"),  # Defaults to production
     )
     
     # Complex SQL query with aggregations
@@ -243,6 +249,7 @@ This example shows how to execute a more complex SQL query with aggregations.
       // Initialize the client with your API key
       client := worqhat.NewClient(
         option.WithAPIKey(os.Getenv("WORQHAT_API_KEY")),
+        option.WithEnvironment(os.Getenv("WORQHAT_ENVIRONMENT", "production")),  // Defaults to production
       )
       
       // Complex SQL query with aggregations
@@ -282,6 +289,7 @@ This example shows how to execute a more complex SQL query with aggregations.
     curl -X POST "https://api.worqhat.com/db/query" \
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer YOUR_API_KEY" \
+      -H "X-Environment: production" \
       -d '{
         "query": "SELECT category, COUNT(*) as order_count, SUM(quantity) as total_items, SUM(price * quantity) as total_revenue FROM orders WHERE order_date >= \'2025-01-01\' GROUP BY category ORDER BY total_revenue DESC"
       }'

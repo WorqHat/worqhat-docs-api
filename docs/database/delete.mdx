@@ -44,6 +44,7 @@ This example shows how to delete records that match a single condition.
     // Initialize the client with your API key
     const client = new Worqhat({
       apiKey: process.env.WORQHAT_API_KEY, // Always use environment variables for API keys
+      environment: process.env.WORQHAT_ENVIRONMENT || 'production', // Defaults to production
     });
     
     async function deleteInactiveUsers() {
@@ -79,6 +80,7 @@ This example shows how to delete records that match a single condition.
     # Initialize the client with your API key
     client = Worqhat(
         api_key=os.environ.get("WORQHAT_API_KEY"),  # Using environment variables for security
+        environment=os.environ.get("WORQHAT_ENVIRONMENT", "production"),  # Defaults to production
     )
     
     # Delete inactive users
@@ -116,6 +118,7 @@ This example shows how to delete records that match a single condition.
       // Initialize the client with your API key
       client := worqhat.NewClient(
         option.WithAPIKey(os.Getenv("WORQHAT_API_KEY")),  // Using environment variables
+        option.WithEnvironment(os.Getenv("WORQHAT_ENVIRONMENT", "production")),  // Defaults to production
       )
       
       // Delete inactive users
@@ -145,6 +148,7 @@ This example shows how to delete records that match a single condition.
     curl -X DELETE "https://api.worqhat.com/db/delete" \
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer YOUR_API_KEY" \
+      -H "X-Environment: production" \
       -d '{
         "table": "users",
         "where": {
@@ -167,6 +171,7 @@ This example shows how to delete records that match multiple conditions.
     // Initialize the client with your API key
     const client = new Worqhat({
       apiKey: process.env.WORQHAT_API_KEY,
+      environment: process.env.WORQHAT_ENVIRONMENT || 'production', // Defaults to production
     });
     
     async function deleteOldCompletedTasks() {
@@ -205,6 +210,7 @@ This example shows how to delete records that match multiple conditions.
     # Initialize the client with your API key
     client = Worqhat(
         api_key=os.environ.get("WORQHAT_API_KEY"),
+        environment=os.environ.get("WORQHAT_ENVIRONMENT", "production"),  # Defaults to production
     )
     
     # Get date from 30 days ago
@@ -246,6 +252,7 @@ This example shows how to delete records that match multiple conditions.
       // Initialize the client with your API key
       client := worqhat.NewClient(
         option.WithAPIKey(os.Getenv("WORQHAT_API_KEY")),
+        option.WithEnvironment(os.Getenv("WORQHAT_ENVIRONMENT", "production")),  // Defaults to production
       )
       
       // Get date from 30 days ago
@@ -279,6 +286,7 @@ This example shows how to delete records that match multiple conditions.
     curl -X DELETE "https://api.worqhat.com/db/delete" \
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer YOUR_API_KEY" \
+      -H "X-Environment: production" \
       -d '{
         "table": "tasks",
         "where": {
