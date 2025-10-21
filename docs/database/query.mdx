@@ -13,6 +13,8 @@ POST https://api.worqhat.com/db/query
 
 This endpoint allows you to execute SQL queries directly against your database. Think of it like having direct access to your database through SQL, but with safety measures in place to prevent accidental data loss or destructive operations.
 
+You can use both **named parameters** (`{param}`) and **positional parameters** (`$1, $2`) to safely pass values into your queries, preventing SQL injection attacks.
+
 ## When to Use SQL Queries
 
 You'll find this endpoint useful when you need to:
@@ -26,15 +28,16 @@ You'll find this endpoint useful when you need to:
 
 ## How It Works
 
-1. You provide a **SQL query** to execute
-2. The API runs your query against the database with security guardrails
-3. The results are returned as an array of objects
+1. You provide a **SQL query** to execute (with optional parameters)
+2. You can use **named parameters** (`{param}`) or **positional parameters** (`$1, $2`) for safe value substitution
+3. The API runs your query against the database with security guardrails
+4. The results are returned as an array of objects
 
 ## Code Examples
 
-### Example: Basic SQL Query
+### Example 1: Basic SQL Query with Named Parameters
 
-This example shows how to execute a simple SQL query to retrieve active users.
+This example shows how to execute a simple SQL query using named parameters to safely pass values.
 
 <Tabs>
   <Tab title="Node.js" icon="js">
@@ -49,9 +52,13 @@ This example shows how to execute a simple SQL query to retrieve active users.
     
     async function fetchActiveUsers() {
       try {
-        // Call the executeQuery method
+        // Call the executeQuery method with named parameters
         const response = await client.db.executeQuery({
-          query: "SELECT * FROM users WHERE status = 'active' LIMIT 10"
+          query: "SELECT * FROM users WHERE status = {status} LIMIT {limit}",
+          params: {
+            status: "active",
+            limit: 10
+          }
         });
         
         // Handle the successful response
@@ -81,10 +88,14 @@ This example shows how to execute a simple SQL query to retrieve active users.
         environment=os.environ.get("WORQHAT_ENVIRONMENT", "production"),  # Defaults to production
     )
     
-    # Execute SQL query
+    # Execute SQL query with named parameters
     try:
         response = client.db.execute_query(
-            query="SELECT * FROM users WHERE status = 'active' LIMIT 10"
+            query="SELECT * FROM users WHERE status = {status} LIMIT {limit}",
+            params={
+                "status": "active",
+                "limit": 10
+            }
         )
         
         # Handle the successful response
@@ -117,9 +128,13 @@ This example shows how to execute a simple SQL query to retrieve active users.
         option.WithEnvironment(os.Getenv("WORQHAT_ENVIRONMENT", "production")),  // Defaults to production
       )
       
-      // Execute SQL query
+      // Execute SQL query with named parameters
       response, err := client.DB.ExecuteQuery(context.TODO(), worqhat.DBExecuteQueryParams{
-        Query: "SELECT * FROM users WHERE status = 'active' LIMIT 10",
+        Query: "SELECT * FROM users WHERE status = {status} LIMIT {limit}",
+        Params: map[string]interface{}{
+          "status": "active",
+          "limit": 10,
+        },
       })
       
       // Handle errors
@@ -138,21 +153,25 @@ This example shows how to execute a simple SQL query to retrieve active users.
   
   <Tab title="cURL" icon="terminal">
     ```bash
-    # Execute SQL query
+    # Execute SQL query with named parameters
     curl -X POST "https://api.worqhat.com/db/query" \
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer YOUR_API_KEY" \
       -d '{
-        "query": "SELECT * FROM users WHERE status = \'active\' LIMIT 10",
+        "query": "SELECT * FROM users WHERE status = {status} LIMIT {limit}",
+        "params": {
+          "status": "active",
+          "limit": 10
+        },
         "environment": "production"
       }'
     ```
   </Tab>
 </Tabs>
 
-### Example: Advanced SQL Query
+### Example 2: Advanced SQL Query with Positional Parameters
 
-This example shows how to execute a more complex SQL query with aggregations.
+This example shows how to execute a more complex SQL query using positional parameters for safe value substitution.
 
 <Tabs>
   <Tab title="Node.js" icon="js">
@@ -167,7 +186,7 @@ This example shows how to execute a more complex SQL query with aggregations.
     
     async function generateSalesReport() {
       try {
-        // Complex SQL query with aggregations
+        // Complex SQL query with positional parameters
         const query = `
           SELECT 
             category, 
@@ -175,13 +194,16 @@ This example shows how to execute a more complex SQL query with aggregations.
             SUM(quantity) as total_items, 
             SUM(price * quantity) as total_revenue
           FROM orders
-          WHERE order_date >= '2025-01-01'
+          WHERE order_date >= $1
           GROUP BY category
           ORDER BY total_revenue DESC
         `;
         
-        // Execute the query
-        const response = await client.db.executeQuery({ query });
+        // Execute the query with positional parameters
+        const response = await client.db.executeQuery({ 
+          query,
+          params: ['2025-01-01']
+        });
         
         // Handle the successful response
         console.log('Sales report generated successfully');
@@ -207,7 +229,7 @@ This example shows how to execute a more complex SQL query with aggregations.
         environment=os.environ.get("WORQHAT_ENVIRONMENT", "production"),  # Defaults to production
     )
     
-    # Complex SQL query with aggregations
+    # Complex SQL query with positional parameters
     query = """
         SELECT 
             category, 
@@ -215,14 +237,17 @@ This example shows how to execute a more complex SQL query with aggregations.
             SUM(quantity) as total_items, 
             SUM(price * quantity) as total_revenue
         FROM orders
-        WHERE order_date >= '2025-01-01'
+        WHERE order_date >= $1
         GROUP BY category
         ORDER BY total_revenue DESC
     """
     
-    # Execute the query
+    # Execute the query with positional parameters
     try:
-        response = client.db.execute_query(query=query)
+        response = client.db.execute_query(
+            query=query,
+            params=['2025-01-01']
+        )
         
         # Handle the successful response
         print("Sales report generated successfully")
@@ -252,7 +277,7 @@ This example shows how to execute a more complex SQL query with aggregations.
         option.WithEnvironment(os.Getenv("WORQHAT_ENVIRONMENT", "production")),  // Defaults to production
       )
       
-      // Complex SQL query with aggregations
+      // Complex SQL query with positional parameters
       query := `
         SELECT 
           category, 
@@ -260,14 +285,15 @@ This example shows how to execute a more complex SQL query with aggregations.
           SUM(quantity) as total_items, 
           SUM(price * quantity) as total_revenue
         FROM orders
-        WHERE order_date >= '2025-01-01'
+        WHERE order_date >= $1
         GROUP BY category
         ORDER BY total_revenue DESC
       `
       
-      // Execute the query
+      // Execute the query with positional parameters
       response, err := client.DB.ExecuteQuery(context.TODO(), worqhat.DBExecuteQueryParams{
         Query: query,
+        Params: []interface{}{"2025-01-01"},
       })
       
       // Handle errors
@@ -285,12 +311,97 @@ This example shows how to execute a more complex SQL query with aggregations.
   
   <Tab title="cURL" icon="terminal">
     ```bash
-    # Execute complex SQL query
+    # Execute complex SQL query with positional parameters
     curl -X POST "https://api.worqhat.com/db/query" \
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer YOUR_API_KEY" \
       -d '{
-        "query": "SELECT category, COUNT(*) as order_count, SUM(quantity) as total_items, SUM(price * quantity) as total_revenue FROM orders WHERE order_date >= \'2025-01-01\' GROUP BY category ORDER BY total_revenue DESC",
+        "query": "SELECT category, COUNT(*) as order_count, SUM(quantity) as total_items, SUM(price * quantity) as total_revenue FROM orders WHERE order_date >= $1 GROUP BY category ORDER BY total_revenue DESC",
+        "params": ["2025-01-01"],
+        "environment": "production"
+      }'
+    ```
+  </Tab>
+</Tabs>
+
+### Example 3: Mixed Parameter Types
+
+This example shows how to use both named and positional parameters in the same query for maximum flexibility.
+
+<Tabs>
+  <Tab title="Node.js" icon="js">
+    ```javascript
+    import Worqhat from 'worqhat';
+    
+    // Initialize the client with your API key
+    const client = new Worqhat({
+      apiKey: process.env.WORQHAT_API_KEY,
+    });
+    
+    async function searchUsers() {
+      try {
+        // Query using both parameter types
+        const response = await client.db.executeQuery({
+          query: "SELECT * FROM users WHERE status = {status} AND created_at >= $1 ORDER BY {sort_by} LIMIT $2",
+          params: {
+            status: "active",
+            sort_by: "created_at"
+          },
+          // Note: Positional parameters are passed as an array
+          // The query will use $1 and $2 for the positional params
+        });
+        
+        console.log('Search completed successfully');
+        console.log('Results:', response.data);
+        return response;
+      } catch (error) {
+        console.error('Error searching users:', error.message);
+      }
+    }
+    
+    searchUsers();
+    ```
+  </Tab>
+  
+  <Tab title="Python" icon="python">
+    ```python
+    from worqhat import Worqhat
+    import os
+    
+    # Initialize the client with your API key
+    client = Worqhat(
+        api_key=os.environ.get("WORQHAT_API_KEY"),
+    )
+    
+    # Search users with mixed parameters
+    try:
+        response = client.db.execute_query(
+            query="SELECT * FROM users WHERE status = {status} AND created_at >= $1 ORDER BY {sort_by} LIMIT $2",
+            params={
+                "status": "active",
+                "sort_by": "created_at"
+            }
+        )
+        
+        print("Search completed successfully")
+        print(f"Results: {response.data}")
+    except Exception as e:
+        print(f"Error searching users: {str(e)}")
+    ```
+  </Tab>
+  
+  <Tab title="cURL" icon="terminal">
+    ```bash
+    # Search users with mixed parameter types
+    curl -X POST "https://api.worqhat.com/db/query" \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer YOUR_API_KEY" \
+      -d '{
+        "query": "SELECT * FROM users WHERE status = {status} AND created_at >= $1 ORDER BY {sort_by} LIMIT $2",
+        "params": {
+          "status": "active",
+          "sort_by": "created_at"
+        },
         "environment": "production"
       }'
     ```
@@ -302,7 +413,31 @@ This example shows how to execute a more complex SQL query with aggregations.
 <ParamField body="query" type="string" required>
   The SQL query to execute against the database. This can be any valid SQL query that reads data (SELECT statements).
   
+  You can use either:
+  - **Named parameters**: `{param}` syntax (e.g., `SELECT * FROM users WHERE status = {status}`)
+  - **Positional parameters**: `$1, $2, $3` syntax (e.g., `SELECT * FROM users WHERE status = $1`)
+  
   For security reasons, certain operations may be restricted to prevent accidental data loss or unauthorized access.
+</ParamField>
+
+<ParamField body="params" type="object | array" optional>
+  Parameters to safely substitute into your SQL query. Choose one format:
+  
+  **For named parameters** (`{param}` syntax): Provide an object with key-value pairs.
+  ```json
+  {"status": "active", "limit": 10}
+  ```
+  
+  **For positional parameters** (`$1, $2` syntax): Provide an array of values in order.
+  ```json
+  ["active", 10]
+  ```
+</ParamField>
+
+<ParamField body="environment" type="string" optional>
+  The environment to query (development, staging, production). Defaults to production if not specified.
+  
+  Options: `development`, `staging`, `production`
 </ParamField>
 
 ## Response Fields Explained
@@ -359,9 +494,19 @@ This example shows how to execute a more complex SQL query with aggregations.
 
 ## Tips for Successful Queries
 
+- **Use parameters for all dynamic values** to prevent SQL injection attacks
+- **Choose the right parameter type**: Use named parameters for readability, positional for performance
 - **Use LIMIT clauses** to restrict the number of results returned
 - **Be specific with your SELECT columns** rather than using SELECT *
 - **Add appropriate WHERE clauses** to filter results
 - **Use indexes** when querying large tables
 - **Test complex queries** on small datasets first
 - **Consider query performance** for production applications
+
+## Parameter Safety
+
+Both named (`{param}`) and positional (`$1, $2`) parameters provide protection against SQL injection by properly escaping values. Choose the approach that best fits your use case:
+
+- **Named parameters**: More readable and maintainable for complex queries
+- **Positional parameters**: Slightly more performant for simple queries with few parameters
+- **Mixed usage**: You can use both types in the same query for maximum flexibility
