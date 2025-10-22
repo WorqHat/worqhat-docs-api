@@ -22,7 +22,7 @@ This endpoint allows you to query your database using plain English questions in
 
 ## How It Works
 
-1. You provide a natural language question and specify which table to query
+1. You provide a natural language question about your data
 2. The API translates your question into a SQL query
 3. The SQL query is executed against your database
 4. The results are returned along with the generated SQL for transparency
@@ -80,7 +80,6 @@ This example shows how to execute a simple natural language query to retrieve ac
         // Call the processNlQuery method
         const response = await client.db.processNlQuery({
           question: "How many active users do we have?",
-          table: "users",
           environment: process.env.WORQHAT_ENVIRONMENT || 'production' // Defaults to production
         });
         
@@ -114,7 +113,6 @@ This example shows how to execute a simple natural language query to retrieve ac
     try:
         response = client.db.process_nl_query(
             question="How many active users do we have?",
-            table="users",
             environment=os.environ.get("WORQHAT_ENVIRONMENT", "production")  # Defaults to production
         )
         
@@ -150,7 +148,6 @@ This example shows how to execute a simple natural language query to retrieve ac
       // Execute natural language query
       response, err := client.DB.ProcessNlQuery(context.TODO(), worqhat.DBProcessNlQueryParams{
         Question: "How many active users do we have?",
-        Table: "users",
         Environment: os.Getenv("WORQHAT_ENVIRONMENT", "production"), // Defaults to production
       })
       
@@ -176,7 +173,6 @@ This example shows how to execute a simple natural language query to retrieve ac
       -H "Authorization: Bearer YOUR_API_KEY" \
       -d '{
         "question": "How many active users do we have?",
-        "table": "users",
         "environment": "production"
       }'
     ```
@@ -205,7 +201,6 @@ This example shows how to execute a more complex natural language query to analy
         // More complex natural language query
         const response = await client.db.processNlQuery({
           question: "What were the top 3 product categories by revenue last quarter?",
-          table: "sales",
           environment: process.env.WORQHAT_ENVIRONMENT || 'production' // Defaults to production
         });
         
@@ -236,7 +231,6 @@ This example shows how to execute a more complex natural language query to analy
     try:
         response = client.db.process_nl_query(
             question="What were the top 3 product categories by revenue last quarter?",
-            table="sales",
             environment=os.environ.get("WORQHAT_ENVIRONMENT", "production")  # Defaults to production
         )
         
@@ -271,7 +265,6 @@ This example shows how to execute a more complex natural language query to analy
       // Execute more complex natural language query
       response, err := client.DB.ProcessNlQuery(context.TODO(), worqhat.DBProcessNlQueryParams{
         Question: "What were the top 3 product categories by revenue last quarter?",
-        Table: "sales",
         Environment: os.Getenv("WORQHAT_ENVIRONMENT", "production"), // Defaults to production
       })
       
@@ -297,7 +290,6 @@ This example shows how to execute a more complex natural language query to analy
       -H "Authorization: Bearer YOUR_API_KEY" \
       -d '{
         "question": "What were the top 3 product categories by revenue last quarter?",
-        "table": "sales",
         "environment": "production"
       }'
     ```
@@ -310,12 +302,6 @@ This example shows how to execute a more complex natural language query to analy
   The natural language question to ask about your data. Be as specific as possible for better results.
   
   Examples: "How many active users do we have?", "What was the total revenue last month?", "Which products had the highest sales?"
-</ParamField>
-
-<ParamField body="table" type="string" required>
-  The name of the table to query. This helps the AI understand the context and structure of your data.
-  
-  Example: "users", "orders", "products"
 </ParamField>
 
 ## Response Fields Explained
@@ -361,7 +347,6 @@ This example shows how to execute a more complex natural language query to analy
 | Error | Cause | Solution |
 |-------|-------|----------|
 | "Could not understand question" | Question is too vague or uses unknown terms | Rephrase with more specific language and common terms |
-| "Table not found" | Incorrect table name provided | Verify the table name exists in your database |
 | "Column not found" | Question references fields that don't exist | Use field names that match your database schema |
 | "Query timed out" | Question generates an overly complex query | Simplify your question or break it into smaller parts |
 | "Unauthorized" | Invalid or missing API key | Check that you're using a valid API key |
@@ -371,7 +356,6 @@ This example shows how to execute a more complex natural language query to analy
 - **Be specific**: Include relevant details like time periods, categories, or conditions
 - **Keep it simple**: Start with straightforward questions and gradually increase complexity
 - **Use common terms**: Use terms that match your database schema when possible
-- **Specify the table**: Always provide the correct table name to query
 - **Review the generated SQL**: Check the returned SQL to understand how your question was interpreted
 
 ## Example Questions
