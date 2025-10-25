@@ -130,7 +130,7 @@ This example shows how to get workflow metrics for a specific date range and sta
     async function getWorkflowMetrics() {
       try {
         // Call the getMetrics method
-        const response = await client.workflows.getMetrics({
+        const response = await client.flows.getMetrics({
           start_date: '2025-07-01',     // Start date in YYYY-MM-DD format
           end_date: '2025-07-24',       // End date in YYYY-MM-DD format
           status: 'completed'           // Only include completed workflows
@@ -173,7 +173,7 @@ This example shows how to get workflow metrics for a specific date range and sta
     
     # Get workflow metrics
     try:
-        response = client.workflows.get_metrics(
+        response = client.flows.get_metrics(
             start_date="2025-07-01",    # Start date in YYYY-MM-DD format
             end_date="2025-07-24",      # End date in YYYY-MM-DD format
             status="completed"          # Only include completed workflows
@@ -216,7 +216,7 @@ This example shows how to get workflow metrics for a specific date range and sta
       )
       
       // Get workflow metrics
-      response, err := client.Workflows.GetMetrics(context.TODO(), worqhat.WorkflowsGetMetricsParams{
+      response, err := client.Flows.GetMetrics(context.TODO(), worqhat.FlowsGetMetricsParams{
         StartDate: "2025-07-01",    // Start date in YYYY-MM-DD format
         EndDate: "2025-07-24",      // End date in YYYY-MM-DD format
         Status: "completed",        // Only include completed workflows
@@ -271,7 +271,7 @@ This example shows how to get workflow metrics without specifying dates (using t
       try {
         // Call the getMetrics method without date parameters
         // This will use the default date range (current month)
-        const response = await client.workflows.getMetrics();
+        const response = await client.flows.getMetrics();
         
         // Handle the successful response
         console.log(`Period: ${response.period.startDate} to ${response.period.endDate}`);
@@ -302,7 +302,7 @@ This example shows how to get workflow metrics without specifying dates (using t
     # Get workflow metrics with default date range
     try:
         # No parameters means use the default date range (current month)
-        response = client.workflows.get_metrics()
+        response = client.flows.get_metrics()
         
         # Handle the successful response
         print(f"Period: {response.period.start_date} to {response.period.end_date}")

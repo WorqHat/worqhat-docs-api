@@ -6,7 +6,7 @@ description: 'Learn how to trigger WorqHat workflows by sending JSON data'
 Trigger WorqHat workflows by sending JSON data to them, allowing you to integrate workflow automation with your applications and respond to events in real-time.
 
 ```endpoint
-POST https://api.worqhat.com/api/workflows/trigger/{workflow-id}
+POST https://api.worqhat.com/flows/trigger/{flowId}
 ```
 
 ## What Does This Endpoint Do?
@@ -54,7 +54,7 @@ Before triggering a workflow, you'll need:
   Must be set to `application/json`
 </ParamField>
 
-<ParamField path="workflow-id" type="string" required>
+<ParamField path="flowId" type="string" required>
   The unique identifier (UUID) of the workflow you want to trigger
 </ParamField>
 
@@ -117,7 +117,7 @@ This example shows how to trigger a workflow that processes new customer informa
       try {
         // Trigger the onboarding workflow with customer data
         const response = await client.flows.triggerWithPayload(
-          'workflow-id-for-customer-onboarding',
+          'flowId-for-customer-onboarding',
           { body: customerData }
         );
         
@@ -162,7 +162,7 @@ This example shows how to trigger a workflow that processes new customer informa
         try:
             # Trigger the onboarding workflow with customer data
             response = client.flows.trigger_with_payload(
-                "workflow-id-for-customer-onboarding",
+                "flowId-for-customer-onboarding",
                 body=customer_data
             )
             
@@ -180,7 +180,7 @@ This example shows how to trigger a workflow that processes new customer informa
   
   <Tab title="cURL" icon="terminal">
     ```bash
-    curl -X POST "https://api.worqhat.com/api/workflows/trigger/{workflow-id-for-customer-onboarding}" \
+    curl -X POST "https://api.worqhat.com/api/flows/trigger/{flowId-for-customer-onboarding}" \
       -H "Authorization: Bearer YOUR_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
@@ -326,7 +326,7 @@ except Exception as error:
 ```bash
 # When using cURL, you'll need to handle the response and errors in your script
 # Example with response processing using jq (if available)
-curl -X POST "https://api.worqhat.com/api/workflows/trigger/{workflow_id}" \
+curl -X POST "https://api.worqhat.com/api/flows/trigger/{flowId}" \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"key": "value"}' \
@@ -410,7 +410,7 @@ response = client.flows.trigger_with_payload('order-processing-workflow-id', bod
 ```
 
 ```bash
-curl -X POST "https://api.worqhat.com/api/workflows/trigger/order-processing-workflow-id" \
+curl -X POST "https://api.worqhat.com/api/flows/trigger/order-processing-workflow-id" \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -479,7 +479,7 @@ response = client.flows.trigger_with_payload('data-analysis-workflow-id', body={
 ```
 
 ```bash
-curl -X POST "https://api.worqhat.com/api/workflows/trigger/data-analysis-workflow-id" \
+curl -X POST "https://api.worqhat.com/flows/trigger/data-analysis-workflow-id" \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{

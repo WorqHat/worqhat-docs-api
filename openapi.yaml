@@ -31,8 +31,6 @@ x-organization:
   docs: 'https://docs.worqhat.com'
   contact: 'support@worqhat.com'
 servers:
-  - url: http://localhost:3000
-    description: Local development server
   - url: https://api.worqhat.com
     description: Production API server
 
