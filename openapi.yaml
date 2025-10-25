@@ -39,12 +39,16 @@ servers:
 tags:
   - name: System
     description: System-related endpoints for monitoring and status
+    x-stainless-resource: system
   - name: Workflows
     description: Endpoints for managing and analyzing workflows
+    x-stainless-resource: flows
   - name: Database
     description: Database query and manipulation endpoints
+    x-stainless-resource: database
   - name: Storage
     description: File storage and management endpoints
+    x-stainless-resource: storage
 
 components:
   securitySchemes:
@@ -355,7 +359,10 @@ paths:
                     - type: array
                       description: Positional parameters for queries with $1, $2 syntax
                       items:
-                        type: any
+                        oneOf:
+                          - type: string
+                          - type: number
+                          - type: boolean
                       example: ["summer-vacation-tips", 123]
                 environment:
                   type: string
