@@ -1697,9 +1697,9 @@ paths:
 
   /storage/upload:
     post:
-      summary: Upload a file to S3 storage
+      summary: Upload a file to storage
       description: |
-        Uploads a file to S3 storage and returns the file ID and metadata.
+        Uploads a file to storage and returns the file ID and metadata.
         Optionally specify a custom path within the organization's storage bucket.
       tags:
         - Storage
