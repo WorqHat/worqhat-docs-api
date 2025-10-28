@@ -1695,11 +1695,845 @@ paths:
             });
             const data = await response.json();
 
+  # AI-Native Database Endpoints
+
+  /db/semantic-search:
+    post:
+      summary: Semantic search using vector embeddings
+      description: |
+        Performs semantic search across database tables using vector embeddings. 
+        Supports both single table and cross-table searches with configurable similarity thresholds.
+        Returns records with similarity scores and metadata about matched fields.
+      tags:
+        - Database
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - query
+              properties:
+                query:
+                  type: string
+                  description: Natural language search query
+                  example: "Find products related to machine learning"
+                table:
+                  type: string
+                  description: Single table to search in (optional if tables is provided)
+                  example: "products"
+                tables:
+                  type: array
+                  items:
+                    type: string
+                  description: Multiple tables to search across (optional if table is provided)
+                  example: ["products", "articles", "documents"]
+                limit:
+                  type: number
+                  minimum: 1
+                  maximum: 100
+                  default: 10
+                  description: Maximum number of results to return
+                threshold:
+                  type: number
+                  minimum: 0
+                  maximum: 1
+                  default: 0.7
+                  description: Minimum similarity score threshold
+                filters:
+                  type: object
+                  additionalProperties: true
+                  description: Additional WHERE conditions to apply
+                  example: {"category": "electronics", "price": {"min": 100, "max": 500}}
+                environment:
+                  type: string
+                  description: Environment to search in (development, staging, production)
+                  enum: [development, staging, production]
+                  example: "production"
+      responses:
+        '200':
+          description: Semantic search completed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        table:
+                          type: string
+                          example: "products"
+                        record:
+                          type: object
+                          additionalProperties: true
+                        similarity:
+                          type: number
+                          description: Similarity score (0-1)
+                          example: 0.847
+                        _meta:
+                          type: object
+                          properties:
+                            matched_fields:
+                              type: array
+                              items:
+                                type: string
+                              example: ["title", "description"]
+                  query_embedding_preview:
+                    type: array
+                    items:
+                      type: number
+                    description: First 5 dimensions of the query embedding
+                    example: [0.123, -0.456, 0.789, -0.321, 0.654]
+                  executionTime:
+                    type: number
+                    description: Search execution time in milliseconds
+                    example: 245
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-code-samples:
+        - lang: curl
+          source: |
+            curl -X POST "https://api.worqhat.com/db/semantic-search" \
+              -H "Content-Type: application/json" \
+              -H "Authorization: Bearer YOUR_API_KEY" \
+              -d '{
+                "query": "Find products related to machine learning",
+                "table": "products",
+                "limit": 10,
+                "threshold": 0.7,
+                "environment": "production"
+              }'
+        - lang: javascript
+          source: |
+            const response = await fetch('https://api.worqhat.com/db/semantic-search', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer YOUR_API_KEY'
+              },
+              body: JSON.stringify({
+                query: 'Find products related to machine learning',
+                table: 'products',
+                limit: 10,
+                threshold: 0.7,
+                environment: 'production'
+              })
+            });
+            const data = await response.json();
+
+  /db/hybrid-search:
+    post:
+      summary: Hybrid semantic + keyword search
+      description: |
+        Combines semantic search using vector embeddings with traditional keyword search.
+        Provides weighted scoring between semantic similarity and keyword matching.
+        Ideal for queries that need both contextual understanding and exact term matching.
+      tags:
+        - Database
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - query
+                - table
+              properties:
+                query:
+                  type: string
+                  description: Search query combining natural language and keywords
+                  example: "machine learning algorithms neural networks"
+                table:
+                  type: string
+                  description: Table to search in
+                  example: "products"
+                text_columns:
+                  type: array
+                  items:
+                    type: string
+                  description: Columns to include in keyword search
+                  default: ["description", "content", "title", "name"]
+                  example: ["title", "description", "tags"]
+                semantic_weight:
+                  type: number
+                  minimum: 0
+                  maximum: 1
+                  default: 0.7
+                  description: Weight for semantic similarity score
+                keyword_weight:
+                  type: number
+                  minimum: 0
+                  maximum: 1
+                  default: 0.3
+                  description: Weight for keyword matching score
+                limit:
+                  type: number
+                  minimum: 1
+                  maximum: 100
+                  default: 10
+                  description: Maximum number of results to return
+                environment:
+                  type: string
+                  description: Environment to search in (development, staging, production)
+                  enum: [development, staging, production]
+                  example: "production"
+      responses:
+        '200':
+          description: Hybrid search completed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        record:
+                          type: object
+                          additionalProperties: true
+                        combined_score:
+                          type: number
+                          description: Combined semantic + keyword score
+                          example: 0.823
+                        semantic_score:
+                          type: number
+                          description: Semantic similarity score
+                          example: 0.756
+                        keyword_score:
+                          type: number
+                          description: Keyword matching score
+                          example: 0.234
+                        _meta:
+                          type: object
+                          properties:
+                            search_type:
+                              type: string
+                              example: "hybrid"
+                            weights:
+                              type: object
+                              properties:
+                                semantic:
+                                  type: number
+                                  example: 0.7
+                                keyword:
+                                  type: number
+                                  example: 0.3
+                  query_embedding_preview:
+                    type: array
+                    items:
+                      type: number
+                    description: First 5 dimensions of the query embedding
+                    example: [0.123, -0.456, 0.789, -0.321, 0.654]
+                  executionTime:
+                    type: number
+                    description: Search execution time in milliseconds
+                    example: 312
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-code-samples:
+        - lang: curl
+          source: |
+            curl -X POST "https://api.worqhat.com/db/hybrid-search" \
+              -H "Content-Type: application/json" \
+              -H "Authorization: Bearer YOUR_API_KEY" \
+              -d '{
+                "query": "machine learning algorithms neural networks",
+                "table": "products",
+                "semantic_weight": 0.7,
+                "keyword_weight": 0.3,
+                "limit": 10,
+                "environment": "production"
+              }'
+
+  /db/find-similar:
+    post:
+      summary: Find records similar to a specific record
+      description: |
+        Finds records similar to a specific existing record using vector embeddings.
+        Useful for "More like this" functionality and cross-table similarity search.
+        Returns similarity scores and supports excluding the source record.
+      tags:
+        - Database
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - table
+                - record_id
+              properties:
+                table:
+                  type: string
+                  description: Table containing the source record
+                  example: "products"
+                record_id:
+                  anyOf:
+                    - type: string
+                    - type: number
+                  description: ID of the source record
+                  example: "123"
+                limit:
+                  type: number
+                  minimum: 1
+                  maximum: 100
+                  default: 10
+                  description: Maximum number of similar records to return
+                threshold:
+                  type: number
+                  minimum: 0
+                  maximum: 1
+                  default: 0.7
+                  description: Minimum similarity score threshold
+                exclude_self:
+                  type: boolean
+                  default: true
+                  description: Whether to exclude the source record from results
+                target_table:
+                  type: string
+                  description: Different table to search in (optional)
+                  example: "articles"
+                environment:
+                  type: string
+                  description: Environment to search in (development, staging, production)
+                  enum: [development, staging, production]
+                  example: "production"
+      responses:
+        '200':
+          description: Similar records found successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  source_record:
+                    type: object
+                    additionalProperties: true
+                    description: The original record used for similarity search
+                  similar_records:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        table:
+                          type: string
+                          example: "products"
+                        record:
+                          type: object
+                          additionalProperties: true
+                        similarity:
+                          type: number
+                          description: Similarity score (0-1)
+                          example: 0.891
+                  executionTime:
+                    type: number
+                    description: Search execution time in milliseconds
+                    example: 156
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Source record not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-code-samples:
+        - lang: curl
+          source: |
+            curl -X POST "https://api.worqhat.com/db/find-similar" \
+              -H "Content-Type: application/json" \
+              -H "Authorization: Bearer YOUR_API_KEY" \
+              -d '{
+                "table": "products",
+                "record_id": "123",
+                "limit": 10,
+                "threshold": 0.7,
+                "exclude_self": true,
+                "environment": "production"
+              }'
+
+  /db/recommend:
+    post:
+      summary: Generate recommendations using embeddings
+      description: |
+        Generates item recommendations using vector embeddings and collaborative filtering.
+        Supports multiple recommendation strategies including similar items, diverse recommendations,
+        and user history-based recommendations.
+      tags:
+        - Database
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - table
+              properties:
+                table:
+                  type: string
+                  description: Table to generate recommendations from
+                  example: "products"
+                record_id:
+                  anyOf:
+                    - type: string
+                    - type: number
+                  description: Source item ID for item-to-item recommendations
+                  example: "123"
+                user_history:
+                  type: array
+                  items:
+                    type: string
+                  description: Array of record IDs the user has interacted with
+                  example: ["123", "456", "789"]
+                strategy:
+                  type: string
+                  enum: [similar, diverse, popular]
+                  default: similar
+                  description: Recommendation strategy to use
+                limit:
+                  type: number
+                  minimum: 1
+                  maximum: 100
+                  default: 10
+                  description: Maximum number of recommendations to return
+                exclude_ids:
+                  type: array
+                  items:
+                    type: string
+                  description: Record IDs to exclude from recommendations
+                  example: ["123", "456"]
+                environment:
+                  type: string
+                  description: Environment to search in (development, staging, production)
+                  enum: [development, staging, production]
+                  example: "production"
+      responses:
+        '200':
+          description: Recommendations generated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  recommendations:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        record:
+                          type: object
+                          additionalProperties: true
+                        similarity:
+                          type: number
+                          description: Similarity score (0-1)
+                          example: 0.823
+                        _meta:
+                          type: object
+                          properties:
+                            strategy:
+                              type: string
+                              example: "similar"
+                            source:
+                              type: string
+                              example: "single_item"
+                  strategy:
+                    type: string
+                    description: Strategy used for recommendations
+                    example: "similar"
+                  executionTime:
+                    type: number
+                    description: Recommendation generation time in milliseconds
+                    example: 189
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-code-samples:
+        - lang: curl
+          source: |
+            curl -X POST "https://api.worqhat.com/db/recommend" \
+              -H "Content-Type: application/json" \
+              -H "Authorization: Bearer YOUR_API_KEY" \
+              -d '{
+                "table": "products",
+                "record_id": "123",
+                "strategy": "similar",
+                "limit": 10,
+                "environment": "production"
+              }'
+
+  /db/detect-anomalies:
+    post:
+      summary: Detect anomalous records using embeddings
+      description: |
+        Identifies anomalous or outlier records using K-nearest neighbors analysis on vector embeddings.
+        Useful for fraud detection, data quality checks, and identifying unusual patterns.
+        Returns anomaly scores and nearest neighbors for each detected anomaly.
+      tags:
+        - Database
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - table
+              properties:
+                table:
+                  type: string
+                  description: Table to analyze for anomalies
+                  example: "transactions"
+                k:
+                  type: number
+                  minimum: 1
+                  maximum: 50
+                  default: 10
+                  description: Number of nearest neighbors to consider
+                threshold:
+                  type: number
+                  minimum: 0
+                  maximum: 1
+                  default: 0.8
+                  description: Minimum anomaly score threshold
+                limit:
+                  type: number
+                  minimum: 1
+                  maximum: 100
+                  default: 50
+                  description: Maximum number of anomalies to return
+                environment:
+                  type: string
+                  description: Environment to analyze (development, staging, production)
+                  enum: [development, staging, production]
+                  example: "production"
+      responses:
+        '200':
+          description: Anomaly detection completed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  anomalies:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        record:
+                          type: object
+                          additionalProperties: true
+                        anomaly_score:
+                          type: number
+                          description: Anomaly score (0-1, higher = more unusual)
+                          example: 0.923
+                        avg_distance:
+                          type: number
+                          description: Average distance to K nearest neighbors
+                          example: 0.456
+                        nearest_neighbors:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              record:
+                                type: object
+                                additionalProperties: true
+                              distance:
+                                type: number
+                                example: 0.234
+                  total_records:
+                    type: number
+                    description: Total number of records analyzed
+                    example: 1000
+                  anomaly_count:
+                    type: number
+                    description: Number of anomalies detected
+                    example: 15
+                  parameters:
+                    type: object
+                    properties:
+                      k:
+                        type: number
+                        example: 10
+                      threshold:
+                        type: number
+                        example: 0.8
+                  executionTime:
+                    type: number
+                    description: Analysis execution time in milliseconds
+                    example: 1247
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-code-samples:
+        - lang: curl
+          source: |
+            curl -X POST "https://api.worqhat.com/db/detect-anomalies" \
+              -H "Content-Type: application/json" \
+              -H "Authorization: Bearer YOUR_API_KEY" \
+              -d '{
+                "table": "transactions",
+                "k": 10,
+                "threshold": 0.8,
+                "limit": 50,
+                "environment": "production"
+              }'
+
+  /db/cluster:
+    post:
+      summary: Auto-cluster records using K-means on embeddings
+      description: |
+        Performs K-means clustering on vector embeddings to automatically group similar records.
+        Supports auto-detection of optimal cluster count and AI-generated cluster labels.
+        Returns cluster information including centroids, sample records, and quality metrics.
+      tags:
+        - Database
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - table
+              properties:
+                table:
+                  type: string
+                  description: Table to cluster
+                  example: "products"
+                num_clusters:
+                  type: number
+                  minimum: 2
+                  maximum: 20
+                  description: Number of clusters (auto-detected if not provided)
+                  example: 5
+                min_clusters:
+                  type: number
+                  minimum: 2
+                  maximum: 10
+                  default: 2
+                  description: Minimum clusters for auto-detection
+                max_clusters:
+                  type: number
+                  minimum: 2
+                  maximum: 20
+                  default: 10
+                  description: Maximum clusters for auto-detection
+                generate_labels:
+                  type: boolean
+                  default: true
+                  description: Whether to generate AI labels for clusters
+                environment:
+                  type: string
+                  description: Environment to cluster (development, staging, production)
+                  enum: [development, staging, production]
+                  example: "production"
+      responses:
+        '200':
+          description: Clustering completed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  clusters:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                          description: Cluster ID
+                          example: 0
+                        label:
+                          type: string
+                          description: AI-generated cluster description
+                          example: "Cluster focused on: electronics, gadgets, technology"
+                        size:
+                          type: number
+                          description: Number of records in cluster
+                          example: 45
+                        sample_records:
+                          type: array
+                          items:
+                            type: object
+                            additionalProperties: true
+                          description: 3-5 representative records from cluster
+                        centroid:
+                          type: array
+                          items:
+                            type: number
+                          description: Cluster center embedding (first 10 dimensions)
+                          example: [0.123, -0.456, 0.789, -0.321, 0.654, 0.987, -0.234, 0.567, -0.890, 0.123]
+                  optimal_k:
+                    type: number
+                    description: Determined optimal cluster count
+                    example: 5
+                  silhouette_score:
+                    type: number
+                    description: Clustering quality metric (0-1)
+                    example: 0.75
+                  iterations:
+                    type: number
+                    description: Number of K-means iterations performed
+                    example: 12
+                  executionTime:
+                    type: number
+                    description: Clustering execution time in milliseconds
+                    example: 2341
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-code-samples:
+        - lang: curl
+          source: |
+            curl -X POST "https://api.worqhat.com/db/cluster" \
+              -H "Content-Type: application/json" \
+              -H "Authorization: Bearer YOUR_API_KEY" \
+              -d '{
+                "table": "products",
+                "num_clusters": 5,
+                "generate_labels": true,
+                "environment": "production"
+              }'
+
   /storage/upload:
     post:
-      summary: Upload a file to storage
+      summary: Upload a file to S3 storage
       description: |
-        Uploads a file to storage and returns the file ID and metadata.
+        Uploads a file to S3 storage and returns the file ID and metadata.
         Optionally specify a custom path within the organization's storage bucket.
       tags:
         - Storage

@@ -79,7 +79,13 @@
               "docs/database/update",
               "docs/database/delete",
               "docs/database/query",
-              "docs/database/natural-language-query"
+              "docs/database/natural-language-query",
+              "docs/database/semantic-search",
+              "docs/database/hybrid-search",
+              "docs/database/find-similar",
+              "docs/database/recommend",
+              "docs/database/detect-anomalies",
+              "docs/database/cluster"
             ]
           },
           {
@@ -128,7 +134,13 @@
               "api-reference/database/insert-data-into-a-table",
               "api-reference/database/update-data-in-a-table",
               "api-reference/database/delete-data-from-a-table",
-              "api-reference/database/process-natural-language-query"
+              "api-reference/database/process-natural-language-query",
+              "api-reference/database/semantic-search",
+              "api-reference/database/hybrid-search",
+              "api-reference/database/find-similar",
+              "api-reference/database/recommend",
+              "api-reference/database/detect-anomalies",
+              "api-reference/database/cluster"
             ]
           },
           {
