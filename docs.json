@@ -130,7 +130,7 @@
               "workflow/triggers/whatsapp-trigger"  
             ]
           },
-      {
+          {
             "group" : "AI-Nodes",
             "pages" : [
               "workflow/ai-nodes/text-generation",
@@ -142,7 +142,7 @@
              
             ]
           },
-           {
+          {
             "group" : "Utility",
             "pages" : [
               "workflow/utility/send-mail",
