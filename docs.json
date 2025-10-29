@@ -118,6 +118,62 @@
         ]
       },
       {
+        "tab" : "Workflow",
+        "groups" : [
+          {
+            "group" : "Trigers",
+            "pages" : [
+              "Workflow/Triggers/Whatsapp-trigger"
+             
+             
+            ]
+          },
+      {
+            "group" : "AI Nodes",
+            "pages" : [
+              "Workflow/AI Nodes/Text-generation",
+              "Workflow/AI Nodes/Text-to-speech",
+              "Workflow/AI Nodes/image-generation",
+              "Workflow/AI Nodes/image-analysis",
+              "Workflow/AI Nodes/content-moderation",
+              "Workflow/AI Nodes/text-extraction"
+             
+            ]
+          },
+           {
+            "group" : "Utility",
+            "pages" : [
+              "Workflow/Utility/send-mail",
+              "Workflow/Utility/HTML-PDF"
+              
+             
+            ]
+          },
+          {
+            "group": "Database",
+            "pages": [
+              "Workflow/Database/add-new-data",
+              "Workflow/Database/update-data",
+              "Workflow/Database/delete-data",
+              "Workflow/Database/fetch-data",
+              "Workflow/Database/query-data",
+              "Workflow/Database/create-graphs"
+            ]
+          },
+          {
+            "group" : "Process-Nodes",
+            "pages" : [
+              "Workflow/Process-Nodes/if-else-condition",
+              "Workflow/Process-Nodes/Loop-process",
+              "Workflow/Process-Nodes/for-loop",
+              "Workflow/Process-Nodes/Switch-case",
+              "Workflow/Process-Nodes/return-state"
+             
+            ]
+          }
+        ]
+      },
+      {
         "tab": "API Reference",
         "groups": [
           {
