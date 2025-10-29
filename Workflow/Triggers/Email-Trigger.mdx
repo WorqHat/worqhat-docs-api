@@ -1,5 +1,3 @@
-
-
 **Category:** Trigger
 **Type:** Email-Based
 
@@ -37,86 +35,81 @@ This tells the system to automatically create and assign a new incoming email ad
 
 ---
 
-Here’s your **Input Parameters** section rewritten in clean, beginner-friendly bullet points — perfect for use in official documentation:
-
----
-
 ## Input Parameters
 
 **Note:**
 
-* Only `incomingEmail` needs to be configured manually; all other fields are automatically populated when an email is received.
-* You can access any of these parameters in downstream nodes using the syntax:
+- Only `incomingEmail` needs to be configured manually; all other fields are automatically populated when an email is received.
+- You can access any of these parameters in downstream nodes using the syntax:
 
   ```
   {{emailTrigger.input.<parameterName>}}
   ```
 
-
 The **Email Trigger** node receives and exposes several parameters that represent the details of incoming emails.
 
-* **incomingEmail** 
+- **incomingEmail**
   The unique incoming email address assigned to this workflow.
   Use `"{{GENERATE_INCOMING_EMAIL}}"` if you want the system to automatically create one.
 
-* **htmlMessage** 
+- **htmlMessage**
   The full HTML version of the received email’s body content.
 
-* **textMessage** 
+- **textMessage**
   The plain text version of the email message.
 
-* **subject** 
+- **subject**
   The subject line of the received email.
 
-* **from** 
+- **from**
   The sender’s email address.
 
-* **to** 
+- **to**
   The recipient’s email address — usually the unique workflow email address.
 
-* **cc / bcc** 
+- **cc / bcc**
   Lists of carbon copy (CC) and blind carbon copy (BCC) recipients, if included.
 
-* **inReplyTo** 
+- **inReplyTo**
   The message ID of the email this one is replying to, if applicable.
 
-* **references** 
+- **references**
   A reference chain showing related messages in an email thread.
 
-* **attachmentFile** 
+- **attachmentFile**
   The file ID of any attachment included in the email.
 
-* **attachmentFileName** 
+- **attachmentFileName**
   The name of the attached file.
 
-* **attachmentFileType** 
+- **attachmentFileType**
   The MIME type of the attached file (e.g., `"image/png"`, `"application/pdf"`).
 
-* **attachmentFileSize**
+- **attachmentFileSize**
   The size of the attachment, in bytes or a human-readable format.
 
-* **spamScore** 
+- **spamScore**
   A numerical score estimating the likelihood that the email is spam.
 
-* **virusScore** 
+- **virusScore**
   A numerical score estimating the likelihood that the email contains malicious content.
 
-* **deliveryTime** 
+- **deliveryTime**
   The exact delivery timestamp of the email in ISO format.
 
-* **deliveryId** 
+- **deliveryId**
   A unique identifier assigned to the email delivery.
 
-* **deliveryStatus** 
+- **deliveryStatus**
   Indicates the delivery result, such as “delivered” or “failed.”
 
 ---
 
 **Instructions:**
 
-* You **must** configure `incomingEmail` once per workflow.
-* All other fields are automatically populated when an email is received.
-* Access values within the workflow using:
+- You **must** configure `incomingEmail` once per workflow.
+- All other fields are automatically populated when an email is received.
+- Access values within the workflow using:
 
   ```
   {{emailTrigger.input.subject}}
@@ -188,8 +181,8 @@ All details — including sender, subject, and attachments — are captured and 
 
 2. **Generate or Set Incoming Email**
 
-   * Set `incomingEmail` to `"{{GENERATE_INCOMING_EMAIL}}"` to let the system create a new unique address.
-   * If an address already exists, paste it in directly.
+   - Set `incomingEmail` to `"{{GENERATE_INCOMING_EMAIL}}"` to let the system create a new unique address.
+   - If an address already exists, paste it in directly.
 
 3. **Save and Deploy the Workflow**
    After saving, note the generated email address. Any incoming email to this address will now trigger the workflow.
@@ -204,12 +197,12 @@ All details — including sender, subject, and attachments — are captured and 
 
 ## Best Practices
 
-* Always use the `{{GENERATE_INCOMING_EMAIL}}` placeholder for new workflows to ensure unique email creation.
-* Avoid sharing the generated workflow email publicly to prevent spam.
-* Use **Content Moderation** or **Spam Filtering** nodes for safer automation.
-* Utilize both `htmlMessage` and `textMessage` for flexible content extraction.
-* For attachments, use downstream nodes like **File Storage** or **Text Extraction** to process files.
-* Keep an eye on the `spamScore` and `virusScore` fields for automated security actions.
+- Always use the `{{GENERATE_INCOMING_EMAIL}}` placeholder for new workflows to ensure unique email creation.
+- Avoid sharing the generated workflow email publicly to prevent spam.
+- Use **Content Moderation** or **Spam Filtering** nodes for safer automation.
+- Utilize both `htmlMessage` and `textMessage` for flexible content extraction.
+- For attachments, use downstream nodes like **File Storage** or **Text Extraction** to process files.
+- Keep an eye on the `spamScore` and `virusScore` fields for automated security actions.
 
 ---
 
@@ -234,19 +227,19 @@ All details — including sender, subject, and attachments — are captured and 
 
 ## Common Errors
 
-* **"Missing incomingEmail"**
+- **"Missing incomingEmail"**
   **Cause:** `incomingEmail` parameter not set.
   **Solution:** Add `"{{GENERATE_INCOMING_EMAIL}}"` to generate a new address or use an existing one.
 
-* **"Email address already in use"**
+- **"Email address already in use"**
   **Cause:** The same email address is assigned to multiple workflows.
   **Solution:** Each workflow must have a unique email trigger address.
 
-* **"Empty email body"**
+- **"Empty email body"**
   **Cause:** The received email had no body content.
   **Solution:** Ensure you handle both `textMessage` and `htmlMessage` for flexibility.
 
-* **"Attachment not found"**
+- **"Attachment not found"**
   **Cause:** Email contained an attachment but it failed to upload or reference correctly.
   **Solution:** Verify attachment settings and downstream node compatibility.
 

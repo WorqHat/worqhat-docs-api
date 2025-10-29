@@ -12,15 +12,15 @@ It connects workflows to any web-based system for data retrieval or automation.
 The HTTP Request Node acts as a bridge between your workflow and external APIs.
 It can send data, retrieve data, or interact with external applications by specifying:
 
-* Endpoint URL
-* Request Method
-* Body
+- Endpoint URL
+- Request Method
+- Body
 
 Example use cases:
 
-* Create a record in a database
-* Fetch weather data
-* Notify another service
+- Create a record in a database
+- Fetch weather data
+- Notify another service
 
 ## Input Parameters
 
@@ -38,8 +38,7 @@ Authentication type: None / Basic / Bearer
 Required: No
 
 **token (String)**
-Bearer token if needed
-Required: No
+Bearer token for Bearer authentication _(Optional)_
 
 **username (String)**
 Used with Basic auth
@@ -72,15 +71,13 @@ Example:
 Key-value form input
 
 **urlEncodedData (Array)**
-Used when sending URL encoded data
+Used when sending URL-encoded data
 
 **headers (Array)**
 Example:
 
 ```json
-[
-  { "key": "Content-Type", "value": "application/json" }
-]
+[{ "key": "Content-Type", "value": "application/json" }]
 ```
 
 ## Output Parameters
@@ -163,17 +160,17 @@ Single JSON object
 
 ## Best Practices
 
-* Verify endpoint URL
-* Never hard-code API keys
-* Structure request body per API doc
-* Use retry when API rate-limits
-* Check status/error handling
+- Verify endpoint URL
+- Never hard-code API keys
+- Structure request body per API doc
+- Use retry when API rate-limits
+- Check status/error handling
 
 ## Example Workflow
 
 1. User submits form
-2. Form data → HTTP Request Node
-3. API returns new record
+2. Form submission → HTTP Request Node
+3. API returns the created resource
 4. Response ID passed to next node
 
 ## Common Errors

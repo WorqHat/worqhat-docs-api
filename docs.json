@@ -66,7 +66,12 @@
         "groups": [
           {
             "group": "Introduction",
-            "pages": ["docs/get-started", "docs/quickstart", "docs/worqhat-wizard", "docs/rate-limit"]
+            "pages": [
+              "docs/get-started",
+              "docs/quickstart",
+              "docs/worqhat-wizard",
+              "docs/rate-limit"
+            ]
           },
           {
             "group": "System",
@@ -118,68 +123,73 @@
         ]
       },
       {
-        "tab" : "Workflow",
-        "groups" : [
+        "tab": "Workflow",
+        "groups": [
           {
-            "group" : "Triggers",
-            "pages" : [
-              "workflow/triggers/rest-api-trigger",
-              "workflow/triggers/file-upload-trigger",
-              "workflow/triggers/time-based-runs",
-              "workflow/triggers/email-trigger",
-              "workflow/triggers/whatsapp-trigger"  
+            "group": "Triggers",
+            "pages": [
+              "Workflow/Triggers/Rest-Api-Trigger",
+              "Workflow/Triggers/File-Upload-Trigger",
+              "Workflow/Triggers/Time-Based-Runs",
+              "Workflow/Triggers/Email-Trigger",
+              "Workflow/Triggers/Whatsapp-trigger"
             ]
           },
-      {
-            "group" : "AI-Nodes",
-            "pages" : [
-              "workflow/ai-nodes/text-generation",
-              "workflow/ai-nodes/text-to-speech",
-              "workflow/ai-nodes/image-generation",
-              "workflow/ai-nodes/image-analysis",
-              "workflow/ai-nodes/content-moderation",
-              "workflow/ai-nodes/text-extraction"
-             
+          {
+            "group": "AI-Nodes",
+            "pages": [
+              "Workflow/AI-Nodes/Text-Generation",
+              "Workflow/AI-Nodes/Text-to-speech",
+              "Workflow/AI-Nodes/Image-generation",
+              "Workflow/AI-Nodes/Image-analysis",
+              "Workflow/AI-Nodes/Content-Moderation",
+              "Workflow/AI-Nodes/Text-Extraction"
             ]
           },
-           {
-            "group" : "Utility",
-            "pages" : [
-              "workflow/utility/send-mail",
-              "workflow/utility/HTML-PDF",
-              "workflow/utility/calendar-add-event",
-              "workflow/utility/calendar-fetch-events",
-              "workflow/utility/custom-node",
-              "workflow/utility/google-maps",
-              "workflow/utility/web-search",
-              "workflow/utility/handle-variable",
-              "workflow/utility/send-whatsapp",
-               "workflow/utility/send-sms-using-plivo",
-               "workflow/utility/http-request"
-
-
+          {
+            "group": "Utility",
+            "pages": [
+              "Workflow/Utility/send-mail",
+              "Workflow/Utility/HTML-PDF",
+              "Workflow/Utility/Calendar-Add-Event",
+              "Workflow/Utility/Calendar-Fetch-Events",
+              "Workflow/Utility/Custom-Node",
+              "Workflow/Utility/Google-Maps",
+              "Workflow/Utility/Web-Search",
+              "Workflow/Utility/Handle-Variable",
+              "Workflow/Utility/Send-WhatsApp",
+              "Workflow/Utility/Send-Sms-Using-Plivo",
+              "Workflow/Utility/Twilio-SMS",
+              "Workflow/Utility/Http-Request",
+              "Workflow/Utility/Stripe-Customer",
+              "Workflow/Utility/Stripe-Payments",
+              "Workflow/Utility/Generate-Password",
+              "Workflow/Utility/Send-Discord-Message",
+              "Workflow/Utility/Send-Slack-Message",
+              "Workflow/Utility/Image-Overlay",
+              "Workflow/Utility/Giphy-GIFS",
+              "Workflow/Utility/LinkedIn-Search"
             ]
           },
           {
             "group": "Database",
             "pages": [
-              "workflow/database/add-new-data",
-              "workflow/database/update-data",
-              "workflow/database/delete-data",
-              "workflow/database/fetch-data",
-              "workflow/database/query-data",
-              "workflow/database/create-graphs"
+              "Workflow/Database/add-new-data",
+              "Workflow/Database/update-data",
+              "Workflow/Database/delete-data",
+              "Workflow/Database/fetch-data",
+              "Workflow/Database/query-data",
+              "Workflow/Database/create-graphs"
             ]
           },
           {
-            "group" : "Process Nodes",
-            "pages" : [
-              "workflow/process-nodes/if-else-condition",
-              "workflow/process-nodes/loop-process",
-              "workflow/process-nodes/for-loop",
-              "workflow/process-nodes/switch-case",
-              "workflow/process-nodes/return-state"
-             
+            "group": "Process Nodes",
+            "pages": [
+              "Workflow/Process-Nodes/if-else-condition",
+              "Workflow/Process-Nodes/Loop-process",
+              "Workflow/Process-Nodes/for-loop",
+              "Workflow/Process-Nodes/Switch-case",
+              "Workflow/Process-Nodes/return-state"
             ]
           }
         ]

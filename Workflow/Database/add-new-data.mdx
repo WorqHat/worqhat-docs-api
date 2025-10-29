@@ -1,4 +1,3 @@
-
 **Category:** Database
 **Type:** Action Node
 
@@ -24,13 +23,13 @@ You can even use **dynamic variables** from previous nodes, so the data can flow
 
 ## Input Parameters
 
-* **collectionName (String, Required)**
+- **collectionName (String, Required)**
   The name of the target table or collection.
   Must be written in this format: `"environment:tableName"`.
   Only two environments are supported — `"production"` and `"development"`.
   Example: `"production:users"` or `"development:orders"`.
 
-* **Dynamic Column Fields (Optional)**
+- **Dynamic Column Fields (Optional)**
   Each column in your database table automatically appears as a parameter.
   You can provide values for these parameters to insert into the new record.
   Example:
@@ -43,19 +42,19 @@ You can even use **dynamic variables** from previous nodes, so the data can flow
   }
   ```
 
-* **Variable References (Optional)**
+- **Variable References (Optional)**
   You can use variables from previous nodes using double curly braces, for example:
 
   ```
-  {{form.input.name}}  
+  {{form.input.name}}
   {{api.output.email}}
   ```
 
 **Additional Notes:**
 
-* Arrays can be written as comma-separated strings or JSON arrays.
-* Data types and required fields are automatically validated before insertion.
-* If validation fails, an error message will be returned in the output.
+- Arrays can be written as comma-separated strings or JSON arrays.
+- Data types and required fields are automatically validated before insertion.
+- If validation fails, an error message will be returned in the output.
 
 ---
 
@@ -63,13 +62,13 @@ You can even use **dynamic variables** from previous nodes, so the data can flow
 
 The node returns a structured JSON object that contains the results of the insertion process.
 
-* **tableName:** Name of the table where the record was inserted.
-* **queryId:** A unique identifier assigned to the insert operation.
-* **message:** Human-readable status message (for example, “Record added successfully”).
-* **status:** Either `"success"` or `"error"`.
-* **errorType:** The type of error, such as `"validation_error"` or `"permission_denied"`.
-* **errorCode:** Specific code representing the error.
-* **missingColumn:** Name of any missing required column (if validation fails).
+- **tableName:** Name of the table where the record was inserted.
+- **queryId:** A unique identifier assigned to the insert operation.
+- **message:** Human-readable status message (for example, “Record added successfully”).
+- **status:** Either `"success"` or `"error"`.
+- **errorType:** The type of error, such as `"validation_error"` or `"permission_denied"`.
+- **errorCode:** Specific code representing the error.
+- **missingColumn:** Name of any missing required column (if validation fails).
 
 You can access these values in downstream nodes using syntax like:
 
@@ -107,13 +106,15 @@ Expected Output:
 
 ```json
 {
-  "tableName": "users",
-  "queryId": "q12345",
-  "message": "Record added successfully",
-  "status": "success",
-  "errorType": null,
-  "errorCode": null,
-  "missingColumn": null
+  "output": {
+    "tableName": "users",
+    "queryId": "q12345",
+    "message": "Record added successfully",
+    "status": "success",
+    "errorType": null,
+    "errorCode": null,
+    "missingColumn": null
+  }
 }
 ```
 
@@ -134,13 +135,15 @@ Expected Output:
 
 ```json
 {
-  "tableName": "employees",
-  "queryId": null,
-  "message": "Missing required column: name",
-  "status": "error",
-  "errorType": "validation_error",
-  "errorCode": "ERR_MISSING_FIELD",
-  "missingColumn": "name"
+  "output": {
+    "tableName": "employees",
+    "queryId": null,
+    "message": "Missing required column: name",
+    "status": "error",
+    "errorType": "validation_error",
+    "errorCode": "ERR_MISSING_FIELD",
+    "missingColumn": "name"
+  }
 }
 ```
 
@@ -160,11 +163,11 @@ Expected Output:
 
 ## Best Practices
 
-* Always double-check your `collectionName` format (`"environment:tableName"`).
-* Ensure that the column names exactly match your database schema.
-* Use the `"development"` environment for testing before writing to production.
-* Use the `status` and `message` outputs to trigger next steps in your workflow (for example, sending a confirmation email only when status is `"success"`).
-* Keep your database fields clean and consistent — for example, use lowercase column names and avoid spaces.
+- Always double-check your `collectionName` format (`"environment:tableName"`).
+- Ensure that the column names exactly match your database schema.
+- Use the `"development"` environment for testing before writing to production.
+- Use the `status` and `message` outputs to trigger next steps in your workflow (for example, sending a confirmation email only when status is `"success"`).
+- Keep your database fields clean and consistent — for example, use lowercase column names and avoid spaces.
 
 ---
 
@@ -182,19 +185,16 @@ This integration helps automate user data collection end-to-end without writing 
 
 ## Common Errors
 
-* **“Missing required column”** – One of the required columns in your table was not provided.
-  *Fix:* Add the missing column in the node’s data parameters.
+- **“Missing required column”** – One of the required columns in your table was not provided.
+  _Fix:_ Add the missing column in the node’s data parameters.
 
-* **“Invalid collectionName format”** – The collection name doesn’t follow the `"environment:tableName"` format.
-  *Fix:* Use something like `"production:orders"` or `"development:employees"`.
+- **“Invalid collectionName format”** – The collection name doesn’t follow the `"environment:tableName"` format.
+  _Fix:_ Use something like `"production:orders"` or `"development:employees"`.
 
-* **“Permission denied”** – The workflow does not have permission to write to this table.
-  *Fix:* Check your environment’s permissions or credentials.
+- **“Permission denied”** – The workflow does not have permission to write to this table.
+  _Fix:_ Check your environment’s permissions or credentials.
 
-* **“Duplicate key”** – You’re trying to insert a record with a unique value (like an email) that already exists.
-  *Fix:* Ensure unique keys are not repeated in your input data.
+- **“Duplicate key”** – You’re trying to insert a record with a unique value (like an email) that already exists.
+  _Fix:_ Ensure unique keys are not repeated in your input data.
 
 ---
-
-
-

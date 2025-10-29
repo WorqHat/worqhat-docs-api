@@ -1,4 +1,3 @@
-
 **Category:** Database
 **Type:** Update Node
 
@@ -26,10 +25,10 @@ For example, if you want to change a user’s name and email based on their ID, 
 
 The following inputs are accepted by this node:
 
-* **id** – The unique identifier of the record you want to update. It’s used as both a query and data input.
-* **name** – The updated name value that should replace the old one.
-* **email** – The updated email address to store in the database.
-* **created_at** – A timestamp (in ISO format) showing when the record was created or last modified.
+- **id** – The unique identifier of the record you want to update. It’s used as both a query and data input.
+- **name** – The updated name value that should replace the old one.
+- **email** – The updated email address to store in the database.
+- **created_at** – A timestamp (in ISO format) showing when the record was created or last modified.
 
 All inputs are text-based except `created_at`, which should be a valid ISO date string (e.g., `2025-12-01T12:00:00.000Z`).
 
@@ -39,11 +38,11 @@ All inputs are text-based except `created_at`, which should be a valid ISO date 
 
 After execution, the node returns a structured output containing:
 
-* **tableName** – The full name of the database table that was updated (for example, `production:test3`).
-* **queryId** – A unique identifier assigned to the query run.
-* **updatedCount** – The number of records successfully updated.
-* **message** – A summary message describing the result of the operation.
-* **status** – Indicates whether the update was successful or failed.
+- **tableName** – The full name of the database table that was updated (for example, `production:test3`).
+- **queryId** – A unique identifier assigned to the query run.
+- **updatedCount** – The number of records successfully updated.
+- **message** – A summary message describing the result of the operation.
+- **status** – Indicates whether the update was successful or failed.
 
 ---
 
@@ -76,8 +75,8 @@ This output can be used by subsequent nodes in your workflow for conditional act
   "output": {
     "tableName": "production:test3",
     "queryId": "1d6330c7-e3c8-4712-a12f-4594242321d1",
-    "updatedCount": 0,
-    "message": "Successfully updated 0 record(s)",
+    "updatedCount": 1,
+    "message": "Successfully updated 1 record(s)",
     "status": "success"
   }
 }
@@ -92,12 +91,14 @@ This output can be used by subsequent nodes in your workflow for conditional act
 3. In **Table Name**, select the database table you want to modify (e.g., `test3 (production)`).
 4. Add **Query Fields** — these define which records to find. For example:
 
-   * `id = Input: id`
-   * `email = Input: email`
+   - `id = Input: id`
+   - `email = Input: email`
+
 5. Add **Data Parameters** — these specify what will be updated. For example:
 
-   * `name = Input: name`
-   * `created_at = Input: created_at`
+   - `name = Input: name`
+   - `created_at = Input: created_at`
+
 6. Connect the node to any input node (such as a form, trigger, or data fetch node) that supplies the required fields.
 7. Save your configuration and run the workflow.
 8. Review the output message to confirm how many records were updated and whether the operation was successful.
@@ -106,11 +107,11 @@ This output can be used by subsequent nodes in your workflow for conditional act
 
 ## Best Practices
 
-* Always use a **unique identifier** like `id` in your query fields to ensure only the correct record is updated.
-* Make sure all input values (especially timestamps and emails) are correctly formatted before execution.
-* Double-check that you’re updating the correct **environment** (e.g., production vs staging).
-* If testing changes, work in a sandbox or non-production table to avoid overwriting live data.
-* Use the output `message` and `status` for error checking or logging.
+- Always use a **unique identifier** like `id` in your query fields to ensure only the correct record is updated.
+- Make sure all input values (especially timestamps and emails) are correctly formatted before execution.
+- Double-check that you’re updating the correct **environment** (e.g., production vs staging).
+- If testing changes, work in a sandbox or non-production table to avoid overwriting live data.
+- Use the output `message` and `status` for error checking or logging.
 
 ---
 
@@ -122,10 +123,10 @@ Here’s an example of how the **Update Data Node** can be used in a typical wor
 Form Submission → Data Validation → Update Data Node → Send Confirmation Email
 ```
 
-* A user submits a form with updated information.
-* The data is validated in a previous node.
-* The Update Data Node modifies the existing database record.
-* The workflow sends a confirmation email or message to the user.
+- A user submits a form with updated information.
+- The data is validated in a previous node.
+- The Update Data Node modifies the existing database record.
+- The workflow sends a confirmation email or message to the user.
 
 ---
 
@@ -148,4 +149,3 @@ The node couldn’t reach the database.
 → Retry or check your network/database connection settings.
 
 ---
-

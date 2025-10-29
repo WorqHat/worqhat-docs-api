@@ -1,4 +1,3 @@
-
 **Category:** Utility
 **Type:** Custom Code Execution
 
@@ -18,10 +17,10 @@ By writing a short function in a supported programming language, you can fully c
 The **Custom Node** gives developers the freedom to write and execute custom code directly within a workflow.
 This is especially useful when you want to:
 
-* Process data in a unique or complex way.
-* Connect to APIs not natively supported.
-* Apply custom business logic or transformations.
-* Extend the workflow’s functionality without external services.
+- Process data in a unique or complex way.
+- Connect to APIs not natively supported.
+- Apply custom business logic or transformations.
+- Extend the workflow’s functionality without external services.
 
 When configured, the node runs your provided code using the selected language (such as JavaScript or Python) and returns the results to downstream nodes.
 This flexibility makes it a powerful tool for building advanced automations and integrations.
@@ -32,38 +31,39 @@ This flexibility makes it a powerful tool for building advanced automations and 
 
 The **Custom Node** accepts parameters that define the programming language and code you want to execute.
 
-* **language** 
+- **language**
   Defines which programming language to use for your custom function.
   Supported languages include:
 
-  * `"javascript"` – Run code using Node.js environment.
-  * `"python"` – Execute Python code for logic or data processing.
+  - `"javascript"` – Run code using Node.js environment.
+  - `"python"` – Execute Python code for logic or data processing.
     Example:
 
   ```json
-  "language": "javascript"
+  "language": "python"
   ```
 
-* **functionCode**
+- **functionCode**
   The actual code that the node will execute. This should be written as a function that processes inputs and returns results.
   Example:
 
   ```javascript
   function run(input) {
-      const output = input.value * 2;
-      return { result: output };
+    const output = input.value * 2;
+    return { result: output };
   }
   ```
 
 **Notes:**
 
-* Always ensure that your code is self-contained and does not depend on unavailable external modules.
-* Inputs from previous nodes can be accessed using standard variable syntax like:
+- Always ensure that your code is self-contained and does not depend on unavailable external modules.
+- Inputs from previous nodes can be accessed using standard variable syntax like:
 
   ```
   {{previousNode.output.value}}
   ```
-* Outputs from this node can be passed to other nodes using variable references like:
+
+- Outputs from this node can be passed to other nodes using variable references like:
 
   ```
   {{customNode.output.result}}
@@ -78,12 +78,13 @@ Instead, outputs depend entirely on what your custom function returns.
 
 **Typical Output Examples:**
 
-* You can return a JSON object, a text string, or even arrays — for example:
+- You can return a JSON object, a text string, or even arrays — for example:
 
   ```json
   { "result": "Processed successfully" }
   ```
-* These returned fields will automatically become available as outputs for downstream nodes.
+
+- These returned fields will automatically become available as outputs for downstream nodes.
 
 **Accessing Outputs:**
 Use variable references in the workflow, such as:
@@ -122,7 +123,7 @@ It may be text, JSON, or a structured object depending on your implementation.
 }
 ```
 
-*(If input value was 5)*
+_(If input value was 5)_
 
 ---
 
@@ -143,7 +144,7 @@ It may be text, JSON, or a structured object depending on your implementation.
 }
 ```
 
-*(If input text was “hello world”)*
+_(If input text was “hello world”)_
 
 ---
 
@@ -175,12 +176,12 @@ It may be text, JSON, or a structured object depending on your implementation.
 
 ## Best Practices
 
-* Keep your function small and focused on one task.
-* Always validate your input data before processing.
-* Include error handling within your code to prevent workflow crashes.
-* Return results in a consistent JSON structure for easy use in other nodes.
-* Avoid long-running or infinite loops that could delay the workflow.
-* Test your code thoroughly before deploying to production workflows.
+- Keep your function small and focused on one task.
+- Always validate your input data before processing.
+- Include error handling within your code to prevent workflow crashes.
+- Return results in a consistent JSON structure for easy use in other nodes.
+- Avoid long-running or infinite loops that could delay the workflow.
+- Test your code thoroughly before deploying to production workflows.
 
 ---
 
@@ -207,20 +208,18 @@ This setup allows you to use custom logic to modify AI outputs before sending or
 
 ## Common Errors
 
-* **"Missing language"**
+- **"Missing language"**
   **Cause:** The `language` field was left empty.
   **Solution:** Specify a supported language like `"javascript"` or `"python"`.
 
-* **"Invalid function code"**
+- **"Invalid function code"**
   **Cause:** The provided code has syntax errors or missing return statements.
   **Solution:** Verify the code syntax and ensure the function returns a JSON-compatible object.
 
-* **"Runtime error"**
+- **"Runtime error"**
   **Cause:** The custom code failed during execution due to invalid input or logic.
   **Solution:** Add try-catch or equivalent error handling in your function.
 
-* **"No output generated"**
+- **"No output generated"**
   **Cause:** The code executed but didn’t return any value.
   **Solution:** Always return an object with at least one key-value pair.
-
-

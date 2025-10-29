@@ -25,7 +25,7 @@ This makes it ideal for integrating workflows with custom apps, webhooks, or bac
 The **REST API Trigger** node accepts dynamic flat key-value pairs sent by an external request.
 You can define any keys according to the data you expect from the incoming call.
 
-* **exampleKey** *(string, optional)*
+- **exampleKey** _(string, optional)_
   A placeholder for a key in the incoming request.
   Example:
 
@@ -33,7 +33,7 @@ You can define any keys according to the data you expect from the incoming call.
   "userId": "12345"
   ```
 
-* **exampleKey2** *(string, optional)*
+- **exampleKey2** _(string, optional)_
   Another example input key.
   Example:
 
@@ -41,7 +41,7 @@ You can define any keys according to the data you expect from the incoming call.
   "email": "example@domain.com"
   ```
 
-* **exampleKey3** *(string, optional)*
+- **exampleKey3** _(string, optional)_
   Any additional input data you may send through the API.
   Example:
 
@@ -51,16 +51,17 @@ You can define any keys according to the data you expect from the incoming call.
 
 **Instructions:**
 
-* The node accepts only **flat key-value pairs** (no nested objects).
-* Data can be sent via:
+- The node accepts only **flat key-value pairs** (no nested objects).
+- Data can be sent via:
 
-  * JSON body (`application/json`)
-  * Form data (`x-www-form-urlencoded`)
-  * Query parameters (e.g., `?userId=123&source=web`)
-* Arrays must be JSON-encoded (e.g., `["a", "b", "c"]`).
-* Files cannot be attached to this trigger.
-* All keys are optional and schema-free; you can define your own structure as needed.
-* Default values for undefined keys are `null`.
+  - JSON body (`application/json`)
+  - Form data (`x-www-form-urlencoded`)
+  - Query parameters (e.g., `?userId=123&source=web`)
+
+- Arrays must be JSON-encoded (e.g., `["a", "b", "c"]`).
+- Files cannot be attached to this trigger.
+- All keys are optional and schema-free; you can define your own structure as needed.
+- Default values for undefined keys are `null`.
 
 Access input data within the workflow using:
 
@@ -108,7 +109,7 @@ The node does not generate an independent output type — it only exposes input 
 
 **Incoming API Request:**
 
-```json
+```http
 POST /api/workflows/trigger
 Content-Type: application/json
 
@@ -176,12 +177,12 @@ GET /api/workflows/trigger?productId=789&type=purchase
 
 ## Best Practices
 
-* Use consistent key names (e.g., `userId`, `email`, `action`) across all requests.
-* Validate your incoming request payloads before processing.
-* If you expect large or complex data, send it as a JSON-encoded string.
-* Avoid sending files directly; instead, send file URLs or file IDs.
-* Use HTTPS for secure communication.
-* Test your API endpoint thoroughly with Postman or similar tools before deployment.
+- Use consistent key names (e.g., `userId`, `email`, `action`) across all requests.
+- Validate your incoming request payloads before processing.
+- If you expect large or complex data, send it as a JSON-encoded string.
+- Avoid sending files directly; instead, send file URLs or file IDs.
+- Use HTTPS for secure communication.
+- Test your API endpoint thoroughly with Postman or similar tools before deployment.
 
 ---
 
@@ -193,22 +194,21 @@ GET /api/workflows/trigger?productId=789&type=purchase
 2. **AI Node** - Text Generation (drafts a welcome message.)
 3. **Utility Node** - Send Email (sends the message to the user.)
 
-
 ## Common Errors
 
-* **"Invalid JSON format"**
+- **"Invalid JSON format"**
   **Cause:** The incoming request body is not properly formatted.
   **Solution:** Ensure valid JSON syntax or use form-data encoding.
 
-* **"Missing endpoint or unauthorized access"**
+- **"Missing endpoint or unauthorized access"**
   **Cause:** Request sent to the wrong endpoint or missing authorization headers.
   **Solution:** Verify the workflow’s API URL and authentication setup.
 
-* **"Unsupported input type"**
+- **"Unsupported input type"**
   **Cause:** Files or unsupported data structures were sent.
   **Solution:** Only send text, numbers, booleans, or JSON-encoded strings.
 
-* **"No data received"**
+- **"No data received"**
   **Cause:** Request was sent with an empty payload.
   **Solution:** Add at least one key-value pair in the request body or query string.
 
