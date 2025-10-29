@@ -118,6 +118,73 @@
         ]
       },
       {
+        "tab" : "Workflow",
+        "groups" : [
+          {
+            "group" : "Triggers",
+            "pages" : [
+              "workflow/triggers/rest-api-trigger",
+              "workflow/triggers/file-upload-trigger",
+              "workflow/triggers/time-based-runs",
+              "workflow/triggers/email-trigger",
+              "workflow/triggers/whatsapp-trigger"  
+            ]
+          },
+          {
+            "group" : "AI-Nodes",
+            "pages" : [
+              "workflow/ai-nodes/text-generation",
+              "workflow/ai-nodes/text-to-speech",
+              "workflow/ai-nodes/image-generation",
+              "workflow/ai-nodes/image-analysis",
+              "workflow/ai-nodes/content-moderation",
+              "workflow/ai-nodes/text-extraction"
+             
+            ]
+          },
+          {
+            "group" : "Utility",
+            "pages" : [
+              "workflow/utility/send-mail",
+              "workflow/utility/html-pdf",
+              "workflow/utility/calendar-add-event",
+              "workflow/utility/calendar-fetch-events",
+              "workflow/utility/custom-node",
+              "workflow/utility/google-maps",
+              "workflow/utility/web-search",
+              "workflow/utility/handle-variable",
+              "workflow/utility/send-whatsapp",
+               "workflow/utility/send-sms-using-plivo",
+               "workflow/utility/http-request"
+
+
+            ]
+          },
+          {
+            "group": "Database",
+            "pages": [
+              "workflow/database/add-new-data",
+              "workflow/database/update-data",
+              "workflow/database/delete-data",
+              "workflow/database/fetch-data",
+              "workflow/database/query-data",
+              "workflow/database/create-graphs"
+            ]
+          },
+          {
+            "group" : "Process Nodes",
+            "pages" : [
+              "workflow/process-nodes/if-else-condition",
+              "workflow/process-nodes/loop-process",
+              "workflow/process-nodes/for-loop",
+              "workflow/process-nodes/switch-case",
+              "workflow/process-nodes/return-state"
+             
+            ]
+          }
+        ]
+      },
+      {
         "tab": "API Reference",
         "groups": [
           {
