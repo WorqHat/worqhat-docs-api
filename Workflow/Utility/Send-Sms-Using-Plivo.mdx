@@ -40,7 +40,7 @@ The **Send SMS using Plivo** node accepts the following input parameters:
 
 * **message**
   The actual text message you want to send.
-  The content must not exceed **160 characters** per message.
+  Messages longer than **160 characters** are automatically split into multiple segments before sending.
   Example: `"Your OTP code is 472916. It will expire in 5 minutes."`
 
 * **aiMessagePrompt** 

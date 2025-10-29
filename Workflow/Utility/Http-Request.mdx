@@ -24,30 +24,14 @@ Example use cases:
 
 ## Input Parameters
 
-**endpointUrl (String)**
-Complete API endpoint
-Example: `https://jsonplaceholder.typicode.com/posts`
-Required: Yes
+**endpointUrl** (String, Required)
+Complete API endpoint. Example: `https://jsonplaceholder.typicode.com/posts`
 
-**method (String)**
-Supported: GET, POST, PUT, DELETE
-Required: Yes
+**method** (String, Required)
+Supported methods: GET, POST, PUT, DELETE
 
-**authType (String)**
-Authentication type: None / Basic / Bearer
-Required: No
-
-**token (String)**
-Bearer token if needed
-Required: No
-
-**username (String)**
-Used with Basic auth
-Required: No
-
-**password (String)**
-Used with Basic auth
-Required: No
+**authType** (String, Optional)
+Authentication type: None, Basic, or Bearer
 
 **queryParams (Array)**
 Optional key-value params appended to URL
@@ -72,7 +56,7 @@ Example:
 Key-value form input
 
 **urlEncodedData (Array)**
-Used when sending URL encoded data
+Used when sending URL-encoded data
 
 **headers (Array)**
 Example:
@@ -172,8 +156,8 @@ Single JSON object
 ## Example Workflow
 
 1. User submits form
-2. Form data → HTTP Request Node
-3. API returns new record
+2. Form submission → HTTP Request Node
+3. API returns the created resource
 4. Response ID passed to next node
 
 ## Common Errors

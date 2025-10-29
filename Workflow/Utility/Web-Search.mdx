@@ -46,11 +46,12 @@ After execution, the node returns structured web search data and metadata.
 * **results[]** *(array)*
   A list of individual search results retrieved from the web. Each result includes the following fields:
 
-  * **results[].title** *(string)* — Title of the web page or article.
-  * **results[].url** *(string)* — Direct link to the web page.
-  * **results[].snippet** *(string)* — A short excerpt or description from the page content.
-  * **results[].date** *(string)* — The original publication date of the content (if available).
-  * **results[].last_updated** *(string)* — The last modified or indexed date of the page.
+  The **results[]** array contains:
+- **title** — Title of the web page or article
+- **url** — Direct link to the web page
+- **snippet** — A short excerpt from page content
+- **date** — Original publication date (if available)
+- **last_updated** — Last modified or indexed date
 
 * **searchId** *(string)*
   A unique identifier assigned to each web search operation. Useful for logging or debugging multiple search runs.

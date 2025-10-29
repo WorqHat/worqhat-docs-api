@@ -146,7 +146,7 @@
             "group" : "Utility",
             "pages" : [
               "workflow/utility/send-mail",
-              "workflow/utility/HTML-PDF",
+              "workflow/utility/html-pdf",
               "workflow/utility/calendar-add-event",
               "workflow/utility/calendar-fetch-events",
               "workflow/utility/custom-node",

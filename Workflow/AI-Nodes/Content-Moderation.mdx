@@ -60,23 +60,7 @@ The **Content Moderation** node accepts flat key-value pairs that specify the co
   ```
 
 **Instructions:**
-Provide all parameters as flat key-value pairs.
-For multiple files, use comma-separated values such as:
 
-```
-file1.jpg,file2.jpg
-{{nodeId.output.file1}},{{nodeId.output.file2}}
-```
-
-Access input values dynamically within the workflow using:
-
-```
-{{nodeId.input.<key>}}
-```
-
----
-
-**Instructions:**
 Provide all input parameters as flat key-value pairs.
 For multiple file inputs, separate file IDs or variable references with commas. Example:
 
@@ -90,10 +74,6 @@ Access input values within the workflow using:
 ```
 {{nodeId.input.<key>}}
 ```
-
----
-
-Here’s your **Output Parameters** section rewritten in clear bullet-point format — consistent with your documentation tone and easy for beginners to understand:
 
 ---
 
@@ -168,7 +148,7 @@ This identifies the node as handling both text-based and image-based moderation 
 ```json
 {
   "moderationType": "text-moderation",
-  "moderationText": "I hate you!",
+  "moderationText": "I hate you!"
 }
 ```
 
@@ -176,7 +156,6 @@ This identifies the node as handling both text-based and image-based moderation 
 
 ```json
 {
-  {
   "output": {
     "flagged": true,
     "flaggedCategories": [
@@ -200,7 +179,6 @@ This identifies the node as handling both text-based and image-based moderation 
     "processingTime": "1.417",
     "processingId": "modr-3438"
   }
-}
 }
 ```
 

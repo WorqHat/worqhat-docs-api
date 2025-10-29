@@ -53,11 +53,6 @@ The **Image Generation** node accepts simple key-value inputs that define how th
 
   These attachments help the AI maintain a consistent look or replicate certain visual elements.
 
-
-**Instructions:**
-Provide all inputs as flat key-value pairs.
-Dynamic references can be used to link outputs from previous nodes using `{{nodeId.output.<key>}}`.
-
 ---
 
 
@@ -67,10 +62,6 @@ Provide input values as flat key-value pairs. Access variables dynamically using
 ```
 {{nodeId.input.<key>}} or {{nodeId.output.<key>}}
 ```
-
----
-
-Here’s your **Output Parameters** section rewritten in clear bullet-point format — keeping it consistent with your documentation style and easy for beginners to follow:
 
 ---
 
@@ -118,11 +109,8 @@ This node always produces image content as output. Do not modify this value — 
 
 ```json
 {
-  "prompt": "{
-  "input": {
-    "input_text": "A young woman sitting at a desk studying with books and a laptop, focused and surrounded by soft natural light from a nearby window, realistic style, calm and productive atmosphere."
-  }
-}",
+  "prompt": 
+    "A young woman sitting at a desk studying with books and a laptop, focused and surrounded by soft natural light from a nearby window, realistic style, calm and productive atmosphere.",
   "attachments": "image.png"
 }
 ```

@@ -5,7 +5,7 @@
 
 ## Overview
 
-The **Time Based Runs (Time Trigger)** node allows you to automatically start workflows at specific times or intervals without manual intervention.
+The **Time-Based Runs (Time Trigger)** node allows you to automatically start workflows at specific times or intervals without manual intervention.
 It is ideal for scheduling recurring tasks such as data updates, report generation, system cleanups, or automated notifications.
 
 This node ensures workflows are triggered consistently according to your defined schedule, making it a reliable automation starter for time-driven operations.
@@ -53,16 +53,6 @@ Once configured, the workflow will automatically start at the specified time.
 
 This node does **not** produce outputs.
 It is purely a **trigger** — its role is to initiate workflow execution based on time conditions.
-
-**Output Parameters:** N/A
-**Instructions:** No outputs are exposed to downstream nodes.
-
----
-
-## Output Type
-
-**Output Type:** N/A
-This node does not generate any data output; it only triggers workflow execution.
 
 ---
 
@@ -141,8 +131,8 @@ The workflow runs automatically at **9:00 AM, Monday through Friday**.
 ## Best Practices
 
 * Use **interval** for simple repeat tasks (e.g., every few minutes or hours).
-* Use **natural_description** for readability in business or team workflows.
-* Use **cron_description** for complex or system-level automation.
+* Prefer **natural_description** for readability in business or team workflows.
+* Consider **cron_description** for complex or system-level automation.
 * Ensure your workflow remains active; paused workflows will not run automatically.
 * Avoid overlapping intervals (e.g., setting both “*/1” and “every minute”).
 * Always test schedules with short intervals before deploying long-running jobs.
