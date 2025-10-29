@@ -151,8 +151,13 @@
               "workflow/utility/calendar-fetch-events",
               "workflow/utility/custom-node",
               "workflow/utility/google-maps",
-              "workflow/utility/web-search"
-              
+              "workflow/utility/web-search",
+              "workflow/utility/handle-variable",
+              "workflow/utility/send-whatsapp",
+               "workflow/utility/send-sms-using-plivo",
+               "workflow/utility/http-request"
+
+
             ]
           },
           {
