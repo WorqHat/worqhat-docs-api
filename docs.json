@@ -136,7 +136,7 @@
             ]
           },
           {
-            "group": "AI-Nodes",
+            "group": "AI Nodes",
             "pages": [
               "workflow/ai-nodes/text-generation",
               "workflow/ai-nodes/text-to-speech",
